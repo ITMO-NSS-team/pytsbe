@@ -1,8 +1,12 @@
 <img src="./docs/images/pytsbe_logo.png" width="650"/>
 
-**Py**thon **t**ime **s**eries **be**nchmark
+**Py**thon **t**ime **s**eries **be**nchmark. The main goal of this repository is to allow researchers and developers 
+to compare several time series forecasting models or libraries. The repository contains data and the necessary wrappers 
+for forecasting univariate and multivariate time series.
 
 ## Description
+
+### Univariate time series 
 
 The repository includes the following libraries and models for comparison:
 - [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports the time series forecasting task
@@ -16,17 +20,22 @@ The repository includes the following libraries and models for comparison:
 - naive forecaster ETS - Simple exponential smoothing model
 
 Available datasets (check data folder): 
-- [FRED](./data/fred_short.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting of economic data time series (source [link](https://fred.stlouisfed.org/))
+- [FRED](./data/fred.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting of economic data time series (source [link](https://fred.stlouisfed.org/))
 - [TEP](./data/tep.csv) ([license](https://github.com/YKatser/CPDE/tree/master/TEP_data)) - Tennessee Eastman Process (TEP) is a model of the industrial chemical process (source [link](https://paperswithcode.com/dataset/tep))
 - [SMART](./data/smart.csv) - the readings with a time span of 1 minute of house appliances in kW from a smart meter and weather conditions (source [link](https://www.kaggle.com/datasets/taranvee/smart-home-dataset-with-weather-information))
 
 Below is a brief description of datasets:
 
-| **Dataset** | **Total number of ** <br> **time series** | **Average row ** <br> **length** | **Minimum row ** <br> **length** | **Maximum row ** <br> **length** | **Percentage of ** <br> **non-stationary ** <br> **time series** |
+TODO update table after recalculations
+| Dataset | Total number of <br> time series | Average row <br> length | Minimum row <br> length | Maximum row <br> length | Percentage of <br> non-stationary <br> time series |
 | :---------: | :---------------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :--------------------------------------------------------------: |
 | FRED        | 12                                        | 3674                             | 468                              | 17520                            | 67                                                               |
 | TEP         | 41                                        | 12801                            | 12801                            | 12801                            | 5                                                                |
 | SMART       | 31                                        | 503911                           | 503911                           | 503911                           | 42                                                               |
+
+### Multivariate time series 
+
+TODO add description 
 
 ## Documentation
 
