@@ -1,4 +1,4 @@
-<img src="./docs/images/pytsbe_logo.png" width="650"/>
+<img src="./docs/images/pytsbe_logo.png" width="700"/>
 
 **Py**thon **t**ime **s**eries **be**nchmark. The main goal of this repository is to allow researchers and developers 
 to compare several time series forecasting models or libraries. The repository contains data and the necessary wrappers 

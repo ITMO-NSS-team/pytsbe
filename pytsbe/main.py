@@ -21,9 +21,9 @@ class TimeSeriesLauncher:
                      'average': None,
                      }
 
-    def __init__(self, working_dir, datasets_info, launches: int = 1):
+    def __init__(self, working_dir, datasets: List[str], launches: int = 1):
         self.working_dir = working_dir
-        self.datasets_info = datasets_info
+        self.datasets = datasets
         self.launches = launches
 
     def ts_experiment(self, libraries_to_compare: List[str], horizons: List[int], libraries_params: dict = None,
