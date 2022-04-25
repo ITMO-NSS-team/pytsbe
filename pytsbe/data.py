@@ -4,18 +4,36 @@ from dataclasses import dataclass
 import pandas as pd
 import numpy as np
 
+from pytsbe.paths import get_path_for_dataset
+
 
 @dataclass
 class TimeSeriesDatasets:
     """ Class for time series datasets preparing """
-    # Datasets for experiments
-    datasets: Union[List[np.array], List[pd.DataFrame]]
+    # Time series for experiments
+    time_series: Union[List[np.array], List[pd.DataFrame]]
     # Labels for every dataset, list must matching
     labels: List[str]
 
     @staticmethod
-    def setup_from_long_format(path: str, series_id: str = 'series_id',
-                               clip_to: int = None):
+    def configure_dataset_from_path(dataset_name: str, clip_border: int = None):
+        """ Prepare time series based on dataset name
+
+        :param dataset_name: name of dataset to parse
+        :param clip_border: is there a need to clip time series (if None - there is no cropping)
+        """
+        format_by_dataset_name = {'FRED': TimeSeriesDatasets.setup_from_long_format,
+                                  'SMART': TimeSeriesDatasets.setup_from_long_format,
+                                  'TEP': TimeSeriesDatasets.setup_from_long_format}
+
+        # Get appropriate method and path to dataset
+        prepare_method = format_by_dataset_name.get(dataset_name)
+        dataset_path = get_path_for_dataset(dataset_name)
+        val_set = prepare_method(path=dataset_path, clip_to=clip_border)
+        return val_set
+
+    @staticmethod
+    def setup_from_long_format(path: str, series_id: str = 'series_id', clip_to: int = None):
         """ Load data from csv file with long format
 
         Structure can look like this
@@ -44,7 +62,7 @@ class TimeSeriesDatasets:
             datasets.append(time_series)
             labels.append(i)
 
-        return TimeSeriesDatasets(datasets=datasets, labels=labels)
+        return TimeSeriesDatasets(time_series=datasets, labels=labels)
 
     @staticmethod
     def setup_from_wide_format(path: str, clip_to: int = None):
@@ -74,4 +92,4 @@ class TimeSeriesDatasets:
                 datasets.append(time_series)
                 labels.append(i)
 
-        return TimeSeriesDatasets(datasets=datasets, labels=labels)
+        return TimeSeriesDatasets(time_series=datasets, labels=labels)

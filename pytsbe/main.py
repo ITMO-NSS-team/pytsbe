@@ -18,36 +18,35 @@ class TimeSeriesLauncher:
                      'pmdarima': None,
                      'prophet': None,
                      'last': None,
-                     'average': None,
+                     'average': None
                      }
 
     def __init__(self, working_dir, datasets: List[str], launches: int = 1):
         self.working_dir = working_dir
+        # List with datasets to perform validation on them
         self.datasets = datasets
         self.launches = launches
 
-    def ts_experiment(self, libraries_to_compare: List[str], horizons: List[int], libraries_params: dict = None,
-                      validation_blocks: Optional[int] = None):
+    def ts_experiment(self,
+                      libraries_to_compare: List[str],
+                      horizons: List[int],
+                      libraries_params: dict = None,
+                      validation_blocks: Optional[int] = None,
+                      clip_border: int = None):
         """ Perform time series experiments
 
         :param libraries_to_compare: list with libraries for comparison
         :param horizons: forecast horizons to process
         :param libraries_params: parameters for libraries
         :param validation_blocks: validation blocks for in-sample forecasting
+        :param clip_border: is there a need to clip time series (if None - there is no cropping)
         """
 
-        for dataset_name, dataset_info in self.datasets_info.items():
+        for dataset_name in self.datasets:
             print(f'Dataset {dataset_name}')
-            dataset_dir = os.path.join(self.working_dir, dataset_name)
-
-            dataset_path = dataset_info['path']
-            dataset_format = dataset_info['dataset_format']
-            clip_to = dataset_info.get('clip_to')
-
-            if dataset_format == 'wide':
-                val_set = TimeSeriesDatasets.setup_from_wide_format(path=dataset_path, clip_to=clip_to)
-            else:
-                val_set = TimeSeriesDatasets.setup_from_long_format(path=dataset_path, clip_to=clip_to)
+            # Prepare data
+            dataset = TimeSeriesDatasets.configure_dataset_from_path(dataset_name=dataset_name,
+                                                                     clip_border=clip_border)
 
             for library in libraries_to_compare:
                 print(f'Library {library}')
@@ -55,8 +54,8 @@ class TimeSeriesLauncher:
                 runner_class = self._ts_libraries[library]
                 runner_params = libraries_params.get(library)
 
-                library_dir = os.path.join(dataset_dir, library)
-                runner = runner_class(val_set=val_set, working_dir=library_dir,
+                library_dir = os.path.join(self.working_dir, dataset_name, library)
+                runner = runner_class(val_set=dataset, working_dir=library_dir,
                                       params=runner_params, launches=self.launches)
                 runner.perform_validation(horizons=horizons,
                                           validation_blocks=validation_blocks)

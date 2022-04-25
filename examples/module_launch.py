@@ -1,6 +1,3 @@
-import os
-
-from pytsbe.paths import get_data_path
 from pytsbe.main import TimeSeriesLauncher
 
 
@@ -12,7 +9,7 @@ def launch_example():
     launches - number of launches for averaging
     """
     experimenter = TimeSeriesLauncher(working_dir='.',
-                                      datasets=[],
+                                      datasets=['FRED', 'TEP', 'SMART'],
                                       launches=5)
 
     experimenter.ts_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'H2O', 'TPOT'],
