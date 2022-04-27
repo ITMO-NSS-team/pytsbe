@@ -1,7 +1,7 @@
 import os
 from typing import List, Optional
 
-from pytsbe.data import TimeSeriesDatasets
+from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.launch.run_autots import AutoTSTsRun
 from pytsbe.launch.run_fedot import FedotTsRun
 from pytsbe.launch.run_automl import TPOTTsRun, H2OTsRun
@@ -11,21 +11,13 @@ class TimeSeriesLauncher:
     """ Class for performing experiments for time series forecasting task.
     Launch different forecasting libraries or algorithms through one interface
     """
-    _ts_libraries = {'FEDOT': FedotTsRun,
-                     'AutoTS': AutoTSTsRun,
-                     'TPOT': TPOTTsRun,
-                     'H2O': H2OTsRun,
-                     'pmdarima': None,
-                     'prophet': None,
-                     'last': None,
-                     'average': None
-                     }
 
     def __init__(self, working_dir, datasets: List[str], launches: int = 1):
         self.working_dir = working_dir
         # List with datasets to perform validation on them
         self.datasets = datasets
         self.launches = launches
+        self.time_series
 
     def perform_experiment(self,
                            libraries_to_compare: List[str],
