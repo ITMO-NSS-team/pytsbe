@@ -26,12 +26,15 @@ Available datasets (check data folder):
 
 Below is a brief description of datasets:
 
-TODO update table after recalculations
 | Dataset | Total number of <br> time series | Average row <br> length | Minimum row <br> length | Maximum row <br> length | Percentage of <br> non-stationary <br> time series |
 | :---------: | :---------------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :--------------------------------------------------------------: |
 | FRED        | 12                                        | 3674                             | 468                              | 17520                            | 67                                                               |
 | TEP         | 41                                        | 12801                            | 12801                            | 12801                            | 5                                                                |
 | SMART       | 28                                        | 503911                           | 503911                           | 503911                           | 21                                                               |
+
+And visualisations:
+<img src="./docs/images/datasets_vis.png" width="900"/> 
+
 
 ### Multivariate time series 
 

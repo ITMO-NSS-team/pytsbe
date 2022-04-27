@@ -2,8 +2,11 @@ import os
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from pytsbe.data.data import TimeSeriesDatasets
+from pytsbe.paths import get_path_for_dataset
 
 
 class DataExplorer:
@@ -40,7 +43,24 @@ class DataExplorer:
 
     def visualise_series(self):
         """ Display time series in the dataset """
-        raise NotImplementedError()
+        sns.set_theme(style="ticks")
+
+        for dataset_name in self.dataset_names:
+            dataset_path = get_path_for_dataset(dataset_name)
+            df = pd.read_csv(dataset_path, parse_dates=['datetime'])
+
+            series_in_the_dataset = list(df['series_id'].unique())
+            fig, axs = plt.subplots(len(series_in_the_dataset), sharex=True, sharey=False)
+            fig.suptitle(f'Dataset {dataset_name}')
+
+            for i, series_id in enumerate(series_in_the_dataset):
+                df_series = df[df['series_id'] == series_id]
+
+                axs[i].plot(np.arange(len(df_series)), df_series['value'], c='red')
+                axs[i].axes.yaxis.set_visible(False)
+
+            plt.xlabel('Time index')
+            plt.show()
 
     @staticmethod
     def calculate_lengths(dataset: TimeSeriesDatasets):

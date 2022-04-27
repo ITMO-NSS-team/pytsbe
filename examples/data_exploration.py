@@ -5,7 +5,7 @@ def explore_available_datasets():
     explorer = DataExplorer()
     explorer.display_statistics()
 
-    # Look at the time series
+    # Have a look at time series
     explorer.visualise_series()
 
 
