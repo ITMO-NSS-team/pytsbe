@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 
 
 class Reporter:
-    """ Class for preparing reports and visualisations """
+    """ Class for preparing reports and visualisations. Also class allow to
+    calculate new metrics for different forecast horizons based on saved predictions
+    """
     def __init__(self, working_dir, datasets_info, launches: int = 1):
         self.working_dir = working_dir
         self.datasets_info = datasets_info

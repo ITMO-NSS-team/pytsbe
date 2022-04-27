@@ -9,7 +9,7 @@ from pytsbe.paths import get_path_for_dataset
 
 @dataclass
 class TimeSeriesDatasets:
-    """ Class for time series datasets preparing """
+    """ Class for time series datasets preparing. Parse csv files with time series and prepearing """
     # Time series for experiments
     time_series: Union[List[np.array], List[pd.DataFrame]]
     # Labels for every dataset, list must matching

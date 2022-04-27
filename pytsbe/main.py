@@ -27,13 +27,13 @@ class TimeSeriesLauncher:
         self.datasets = datasets
         self.launches = launches
 
-    def ts_experiment(self,
-                      libraries_to_compare: List[str],
-                      horizons: List[int],
-                      libraries_params: dict = None,
-                      validation_blocks: Optional[int] = None,
-                      clip_border: int = None):
-        """ Perform time series experiments
+    def perform_experiment(self,
+                           libraries_to_compare: List[str],
+                           horizons: List[int],
+                           libraries_params: dict = None,
+                           validation_blocks: Optional[int] = None,
+                           clip_border: int = None):
+        """ Perform time series experiments with desired libraries
 
         :param libraries_to_compare: list with libraries for comparison
         :param horizons: forecast horizons to process

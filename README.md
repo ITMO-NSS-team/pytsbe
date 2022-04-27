@@ -31,7 +31,7 @@ TODO update table after recalculations
 | :---------: | :---------------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :--------------------------------------------------------------: |
 | FRED        | 12                                        | 3674                             | 468                              | 17520                            | 67                                                               |
 | TEP         | 41                                        | 12801                            | 12801                            | 12801                            | 5                                                                |
-| SMART       | 31                                        | 503911                           | 503911                           | 503911                           | 42                                                               |
+| SMART       | 28                                        | 503911                           | 503911                           | 503911                           | 21                                                               |
 
 ### Multivariate time series 
 
@@ -43,4 +43,23 @@ See [documentation](./docs) for a more detailed explanation.
 
 ## Results table
 
-TODO add 
+TODO add the results 
+
+## Contributing 
+This module is designed so that you can add your library to it as easily as possible. 
+
+<img src="./docs/images/architecture.png" width="900"/> 
+
+Follow these steps to make the changes:
+- Make a fork of this repository, or create a separate branch
+- Add a new Forecaster class
+- If required, add a new class to serialize additional launch information
+- Create a pull request and ask our team to review it
+- After the code review, correct our notes and merge the code into the main branch
+
+## Citation 
+
+Nikitin, Nikolay O., et al. "[Automated evolutionary approach for the design of composite machine learning pipelines.](https://doi.org/10.1016/j.future.2021.08.022)" 
+Future Generation Computer Systems 127 (2022): 109-125.
+
+Other papers - in [ResearchGate](https://www.researchgate.net/project/Evolutionary-multi-modal-AutoML-with-FEDOT-framework)
