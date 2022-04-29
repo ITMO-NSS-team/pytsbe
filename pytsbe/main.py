@@ -1,23 +1,25 @@
-import os
+from itertools import product
 from typing import List, Optional
 
 from pytsbe.data.data import TimeSeriesDatasets
-from pytsbe.launch.run_autots import AutoTSTsRun
-from pytsbe.launch.run_fedot import FedotTsRun
-from pytsbe.launch.run_automl import TPOTTsRun, H2OTsRun
+from pytsbe.store.save import Serialization
+from pytsbe.validation.validation import Validator
 
 
 class TimeSeriesLauncher:
     """ Class for performing experiments for time series forecasting task.
-    Launch different forecasting libraries or algorithms through one interface
+    Launch different forecasting libraries or algorithms through one interface.
+
+    Important: responsible for datasets, launch and libraries cycles
+    :param working_dir: directory where to store the results of experiments
+    :param datasets: list with names of datasets to perform validation
+    :param launches: number of launches for each dataset
     """
 
-    def __init__(self, working_dir, datasets: List[str], launches: int = 1):
-        self.working_dir = working_dir
-        # List with datasets to perform validation on them
+    def __init__(self, working_dir: str, datasets: List[str], launches: int = 1):
+        self.serializer = Serialization(working_dir)
         self.datasets = datasets
         self.launches = launches
-        self.time_series
 
     def perform_experiment(self,
                            libraries_to_compare: List[str],
@@ -33,21 +35,23 @@ class TimeSeriesLauncher:
         :param validation_blocks: validation blocks for in-sample forecasting
         :param clip_border: is there a need to clip time series (if None - there is no cropping)
         """
+        self.serializer.create_folders_for_results(self.datasets, self.launches, libraries_to_compare)
 
         for dataset_name in self.datasets:
-            print(f'Dataset {dataset_name}')
             # Prepare data
             dataset = TimeSeriesDatasets.configure_dataset_from_path(dataset_name=dataset_name,
                                                                      clip_border=clip_border)
 
-            for library in libraries_to_compare:
-                print(f'Library {library}')
-                # For every library start validation
-                runner_class = self._ts_libraries[library]
-                runner_params = libraries_params.get(library)
+            experiments = product(range(self.launches), libraries_to_compare)
+            for launch_number, current_library_name in experiments:
+                print(f'Dataset {dataset_name} launch number {launch_number}')
+                # Get helper for serialization procedures for appropriate library
+                current_library_serializer = self.serializer.get(current_library_name)
+                current_library_serializer.set_configuration_params(dataset_name, launch_number, current_library_name)
 
-                library_dir = os.path.join(self.working_dir, dataset_name, library)
-                runner = runner_class(val_set=dataset, working_dir=library_dir,
-                                      params=runner_params, launches=self.launches)
-                runner.perform_validation(horizons=horizons,
-                                          validation_blocks=validation_blocks)
+                # Configure validation module and perform experiments
+                current_library_parameters = libraries_params[current_library_name]
+                validator = Validator(current_library_name, current_library_parameters, current_library_serializer)
+                validator.run_all_experiment(dataset=dataset,
+                                             horizons=horizons,
+                                             validation_blocks=validation_blocks)

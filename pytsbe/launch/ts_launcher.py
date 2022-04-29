@@ -7,8 +7,6 @@ from typing import List, Optional, Callable
 from fedot.core.data.data import InputData
 from fedot.core.repository.dataset_types import DataTypesEnum
 
-from pytsbe.data import TimeSeriesDatasets
-
 
 DEFAULT_FAILURES_THRESHOLD = 10
 
