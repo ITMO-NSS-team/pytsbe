@@ -15,7 +15,15 @@ class Forecaster:
 
     @abstractmethod
     def fit(self, historical_values: pd.DataFrame, forecast_horizon: int):
-        """ Fit model (or library) with desired parameters """
+        """ Fit model (or library) with desired parameters
+
+        :param historical_values: dataframe with datetime column and target series.
+        For example:
+        |  datetime  | value |
+        | 01-01-2022 |  254  |
+        | 02-01-2022 |  223  |
+        :param forecast_horizon: forecast length
+        """
         raise NotImplementedError()
 
     @abstractmethod

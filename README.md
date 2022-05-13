@@ -38,7 +38,7 @@ And visualisations:
 
 ### Multivariate time series 
 
-TODO add description 
+In progress 
 
 ## Documentation
 
@@ -46,7 +46,7 @@ See [documentation](./docs) for a more detailed explanation.
 
 ## Results table
 
-TODO add the results 
+In progress
 
 ## Contributing 
 This module is designed so that you can add your library to it as easily as possible. 
@@ -59,6 +59,8 @@ Follow these steps to make the changes:
 - If required, add a new class to serialize additional launch information
 - Create a pull request and ask our team to review it
 - After the code review, correct our notes and merge the code into the main branch
+
+And check [contribution guide](./docs/contribute.md) for more details. 
 
 ## Citation 
 

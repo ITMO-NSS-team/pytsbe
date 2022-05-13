@@ -38,13 +38,14 @@ class TimeSeriesLauncher:
         self.serializer.create_folders_for_results(self.datasets, self.launches, libraries_to_compare)
 
         for dataset_name in self.datasets:
-            # Prepare data
+            # Prepare data in pytsbe dataset form
             dataset = TimeSeriesDatasets.configure_dataset_from_path(dataset_name=dataset_name,
                                                                      clip_border=clip_border)
 
             experiments = product(range(self.launches), libraries_to_compare)
             for launch_number, current_library_name in experiments:
                 print(f'Dataset {dataset_name} launch number {launch_number}')
+
                 # Get helper for serialization procedures for appropriate library
                 current_library_serializer = self.serializer.get(current_library_name)
                 current_library_serializer.set_configuration_params(dataset_name, launch_number, current_library_name)
@@ -52,6 +53,6 @@ class TimeSeriesLauncher:
                 # Configure validation module and perform experiments
                 current_library_parameters = libraries_params[current_library_name]
                 validator = Validator(current_library_name, current_library_parameters, current_library_serializer)
-                validator.run_all_experiment(dataset=dataset,
-                                             horizons=horizons,
-                                             validation_blocks=validation_blocks)
+                validator.perform_experiments_on_dataset_and_horizons(dataset=dataset,
+                                                                      horizons=horizons,
+                                                                      validation_blocks=validation_blocks)

@@ -4,10 +4,12 @@ from typing import Optional, List, Union
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
+from pytsbe.timer import BenchmarkTimer
 
 
 class Validator:
-    """ Class for validation on only one selected dataset for the required forecast horizons
+    """ Class for validation on only one selected dataset (one dataset contains several time series)
+    for the required forecast horizons
 
     Important: responsible for time series (from datasets) and horizons cycles
     """
@@ -23,10 +25,11 @@ class Validator:
         self.library_name = library_name
         self.library_parameters = library_parameters
         self.library_serializer = library_serializer
+        self.timer = BenchmarkTimer()
 
-    def run_all_experiment(self, dataset: TimeSeriesDatasets,
-                           horizons: List[int],
-                           validation_blocks: Optional[int] = None):
+    def perform_experiments_on_dataset_and_horizons(self, dataset: TimeSeriesDatasets,
+                                                    horizons: List[int],
+                                                    validation_blocks: Optional[int] = None):
         """ Launch experiment with desired dataset and time series forecasting algorithms """
         for i, time_series in enumerate(dataset.time_series):
             ts_label = dataset.labels[i]
@@ -34,27 +37,40 @@ class Validator:
             forecaster = self.forecaster_by_name[self.library_name](**self.library_parameters)
             for horizon in horizons:
                 # Prepare model for current forecast horizon
-                results = self._perform_single_experiment(forecaster, time_series, horizon, validation_blocks)
+                results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
 
                 # Save all the necessary results
-                self.library_serializer.save_information(ts_label, results)
+                self.library_serializer.save_information(ts_label, horizon, results)
 
-    def _perform_single_experiment(self, forecaster, time_series: pd.DataFrame,
-                                   horizon: int, validation_blocks: Union[int, None]) -> ForecastResults:
-        """ Launch time series forecasting algorithm on single time series for particular """
+    def _perform_experiment_on_single_ts(self, forecaster, time_series: pd.DataFrame,
+                                         horizon: int, validation_blocks: Union[int, None]) -> ForecastResults:
+        """ Launch time series forecasting algorithm on single time series for particular forecast horizon
+
+        :param forecaster: object, which can produce forecast and use fit and predict methods
+        :param time_series: table with datetime and values columns
+        :param horizon: forecast horizon length
+        :param validation_blocks: number of blocks for in-sample validation
+        """
         if validation_blocks is None or validation_blocks == 1:
             # Simple experiment - predict on only one fold
             train_values, historical_values_for_test, test_values = simple_train_test_split(time_series, horizon)
 
-            forecaster.fit(train_values)
-            forecast_output = forecaster.predict(historical_values=historical_values_for_test,
-                                                 forecast_horizon=horizon)
-            forecast_output.true_values = forecast_output
+            with self.timer.launch_fit():
+                forecaster.fit(train_values, horizon)
+            with self.timer.launch_predict():
+                forecast_output = forecaster.predict(historical_values=historical_values_for_test,
+                                                     forecast_horizon=horizon)
+            # Update result with additional information
+            forecast_output.true_values = test_values
+            forecast_output.timeouts = {'fit_seconds': self.timer.fit_time, 'predict_seconds': self.timer.predict_time}
         else:
             # In-sample validation required
             train_values, historical_values_for_test, test_values = in_sample_train_test_split(time_series,
                                                                                                horizon,
                                                                                                validation_blocks)
+            forecast_output = None
+
+        return forecast_output
 
 
 def simple_train_test_split(time_series: pd.DataFrame, horizon: int):
@@ -68,4 +84,5 @@ def simple_train_test_split(time_series: pd.DataFrame, horizon: int):
 
 
 def in_sample_train_test_split(time_series: pd.DataFrame, horizon: int, validation_blocks: int):
+    """ Prepare several splits of historical values for time series in-sample forecasting """
     raise NotImplementedError()

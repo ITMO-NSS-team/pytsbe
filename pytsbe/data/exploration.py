@@ -4,6 +4,7 @@ import numpy as np
 import statsmodels.api as sm
 import seaborn as sns
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.paths import get_path_for_dataset
@@ -75,12 +76,15 @@ class DataExplorer:
         """
         number_of_all_time_series = len(dataset.time_series)
         number_of_non_stationary_time_series = 0
-        for ts in dataset.time_series:
-            # Calculate statistic
-            p_test = sm.tsa.stattools.adfuller(np.array(ts['value']))[1]
+        with tqdm(total=len(dataset.time_series)) as pbar:
+            pbar.set_description(f'Non stationary series percent calculation')
+            for ts in dataset.time_series:
+                # Calculate statistic
+                p_test = sm.tsa.stattools.adfuller(np.array(ts['value']))[1]
 
-            if p_test > 0.05:
-                number_of_non_stationary_time_series += 1
+                if p_test > 0.05:
+                    number_of_non_stationary_time_series += 1
+                pbar.update(1)
 
         non_stationary_ratio = (number_of_non_stationary_time_series / number_of_all_time_series) * 100
         return round(non_stationary_ratio, 2)

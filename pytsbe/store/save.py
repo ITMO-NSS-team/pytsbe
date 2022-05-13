@@ -4,6 +4,7 @@ from typing import List
 
 from pytsbe.store.default_serializer import DefaultLibrarySerializer
 from pytsbe.store.fedot_serializer import FedotSerializer
+from pytsbe.store.utils import create_folder
 
 
 class Serialization:
@@ -20,7 +21,7 @@ class Serialization:
     def get(self, library_name: str):
         """ Return appropriate library serializer """
         if library_name not in self.lib_serializers_by_name:
-            # Use default limited serializer
+            # Use default limited serializer to store only predictions and timeouts
             serializer = self.lib_serializers_by_name.get('default')(self.storage_paths)
         else:
             serializer = self.lib_serializers_by_name.get(library_name)(self.storage_paths)
@@ -45,10 +46,3 @@ class Serialization:
 
                     structure_key = f'{dataset_folder}_{launch_number}_{library_folder}'
                     self.storage_paths.update({structure_key: library_folder_path})
-
-
-def create_folder(save_path):
-    """ Create folder recursively """
-    save_path = os.path.abspath(save_path)
-    if os.path.isdir(save_path) is False:
-        os.makedirs(save_path)
