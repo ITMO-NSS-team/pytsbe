@@ -2,13 +2,15 @@ import pandas as pd
 import numpy as np
 from fedot.api.main import Fedot
 
-from fedot.core.pipelines.pipeline import Pipeline
 from fedot.core.data.data import InputData
 from fedot.core.repository.tasks import Task, TaskTypesEnum, TsForecastingParams
 from fedot.core.repository.dataset_types import DataTypesEnum
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
+
+import logging
+logging.raiseExceptions = False
 
 
 class FedotForecaster(Forecaster):
@@ -24,8 +26,13 @@ class FedotForecaster(Forecaster):
 
         self.preset = 'ts'
         if 'preset' in params:
-            # Set new value for timeout
+            # Set new preset
             self.preset = params['preset']
+
+        self.predefined_model = None
+        if 'predefined_model' in params:
+            # Set new preset
+            self.predefined_model = params['predefined_model']
 
     def fit(self, historical_values: pd.DataFrame, forecast_horizon: int):
         """ Train FEDOT framework (launch AutoML algorithm) """
@@ -36,8 +43,8 @@ class FedotForecaster(Forecaster):
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
                            timeout=self.timeout, preset=self.preset)
 
-        # TODO change predefined_model after all experiments
-        self.obtained_pipeline = self.model.fit(features=train_data)
+        self.obtained_pipeline = self.model.fit(features=train_data,
+                                                predefined_model=self.predefined_model)
 
     def predict(self, historical_values: pd.DataFrame, forecast_horizon: int) -> ForecastResults:
         """ Use obtained pipeline to make predictions """

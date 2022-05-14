@@ -1,10 +1,14 @@
 import pandas as pd
+import numpy as np
 from typing import Optional, List, Union
 
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.timer import BenchmarkTimer
+
+import warnings
+warnings.filterwarnings('ignore')
 
 
 class Validator:
@@ -65,11 +69,35 @@ class Validator:
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time, 'predict_seconds': self.timer.predict_time}
         else:
             # In-sample validation required
-            train_values, historical_values_for_test, test_values = in_sample_train_test_split(time_series,
-                                                                                               horizon,
-                                                                                               validation_blocks)
-            forecast_output = None
+            validation_block_number = 0
+            results = []
+            for train_values, historical_values_for_test, test_values in in_sample_splitting(time_series,
+                                                                                             horizon,
+                                                                                             validation_blocks):
+                if validation_block_number == 0:
+                    with self.timer.launch_fit():
+                        # Perform training only for first launch
+                        forecaster.fit(train_values, horizon)
 
+                    with self.timer.launch_predict():
+                        # Check run time only for first validation block
+                        forecast_output = forecaster.predict(historical_values=historical_values_for_test,
+                                                             forecast_horizon=horizon)
+                else:
+                    # Make only forecast
+                    forecast_output = forecaster.predict(historical_values=historical_values_for_test,
+                                                         forecast_horizon=horizon)
+
+                forecast_output.true_values = test_values
+                forecast_output.timeouts = {'fit_seconds': self.timer.fit_time,
+                                            'predict_seconds': self.timer.predict_time}
+                results.append(forecast_output)
+                validation_block_number += 1
+
+            # Perform union of in-sample forecasting results
+            forecast_output = ForecastResults.union(results)
+
+        self.timer.reset_timers()
         return forecast_output
 
 
@@ -83,6 +111,21 @@ def simple_train_test_split(time_series: pd.DataFrame, horizon: int):
     return train_values, historical_values_for_test, test_values
 
 
-def in_sample_train_test_split(time_series: pd.DataFrame, horizon: int, validation_blocks: int):
-    """ Prepare several splits of historical values for time series in-sample forecasting """
-    raise NotImplementedError()
+def in_sample_splitting(time_series: pd.DataFrame, horizon: int, validation_blocks: int):
+    """
+    Prepare several splits of historical values for time series in-sample
+    forecasting and return it iteratively
+    """
+    source_ts_len = len(time_series)
+
+    for validation_block in np.arange(validation_blocks, 0, -1):
+        # Create dataframes per each validation block
+        remained_part_for_test = horizon * validation_block
+
+        last_train_index = source_ts_len - remained_part_for_test
+
+        train_values = time_series.head(last_train_index)
+        historical_values_for_test = train_values.copy()
+        test_values = time_series.iloc[last_train_index: last_train_index + horizon, :]
+
+        yield train_values, historical_values_for_test, test_values

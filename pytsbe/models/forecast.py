@@ -30,10 +30,3 @@ class Forecaster:
     def predict(self, historical_values: pd.DataFrame, forecast_horizon: int) -> ForecastResults:
         """ Generate predictions based on historical values for only one forecast horizon """
         raise NotImplementedError()
-
-    def in_sample_predict(self, batch_historical_values: List[pd.DataFrame], forecast_horizon: int,
-                          full_horizon: int) -> ForecastResults:
-        """ Use iterative prediction with in-sample forecasting algorithm for different historical values.
-        Not obligatory to implement such a method
-        """
-        raise NotImplementedError()

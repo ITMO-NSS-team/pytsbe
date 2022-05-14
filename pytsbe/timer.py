@@ -30,3 +30,7 @@ class BenchmarkTimer:
     @property
     def predict_time(self):
         return self.predict_spend_time.total_seconds()
+
+    def reset_timers(self):
+        self.fit_spend_time = datetime.timedelta(minutes=0)
+        self.predict_spend_time = datetime.timedelta(minutes=0)
