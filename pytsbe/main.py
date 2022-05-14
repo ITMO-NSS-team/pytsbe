@@ -52,7 +52,8 @@ class TimeSeriesLauncher:
 
                 # Configure validation module and perform experiments
                 current_library_parameters = libraries_params[current_library_name]
-                validator = Validator(current_library_name, current_library_parameters, current_library_serializer)
+                validator = Validator(dataset_name, launch_number, current_library_name,
+                                      current_library_parameters, current_library_serializer)
                 validator.perform_experiments_on_dataset_and_horizons(dataset=dataset,
                                                                       horizons=horizons,
                                                                       validation_blocks=validation_blocks)

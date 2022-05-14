@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 from typing import Optional, List, Union
 
+from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
+from pytsbe.exception import ExceptionHandler
 from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
@@ -23,7 +25,8 @@ class Validator:
                           'TPOT': None,
                           'H2O': None}
 
-    def __init__(self, library_name: str, library_parameters: dict, library_serializer):
+    def __init__(self, dataset_name: str, launch_number: int, library_name: str,
+                 library_parameters: dict, library_serializer):
         if library_name not in self.forecaster_by_name:
             raise NotImplementedError(f'Library {library_name} is not supported yet')
 
@@ -31,21 +34,35 @@ class Validator:
         self.library_parameters = library_parameters
         self.library_serializer = library_serializer
         self.timer = BenchmarkTimer()
+        self.launch_status_checker = FailedLaunchChecker(storage_paths=library_serializer.storage_paths,
+                                                         dataset_name=dataset_name,
+                                                         launch_number=launch_number,
+                                                         library_name=library_name)
 
     def perform_experiments_on_dataset_and_horizons(self, dataset: TimeSeriesDatasets,
                                                     horizons: List[int],
                                                     validation_blocks: Optional[int] = None):
-        """ Launch experiment with desired dataset and time series forecasting algorithms """
+        """
+        Launch experiment with desired dataset and time series forecasting algorithms.
+        Check forecasting efficiency on all forecast horizons and all time series from
+        the dataset.
+        """
         for i, time_series in enumerate(dataset.time_series):
             ts_label = dataset.labels[i]
 
             forecaster = self.forecaster_by_name[self.library_name](**self.library_parameters)
             for horizon in horizons:
-                # Prepare model for current forecast horizon
-                results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
+                if self.launch_status_checker.was_case_finished(ts_label, horizon):
+                    # Already finish calculation - skip this case
+                    continue
 
-                # Save all the necessary results
-                self.library_serializer.save_information(ts_label, horizon, results)
+                exception_handler = ExceptionHandler(ts_label, horizon)
+                with exception_handler.safe_process_launch():
+                    # Prepare model for current forecast horizon
+                    results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
+
+                    # Save all the necessary results
+                    self.library_serializer.save_information(ts_label, horizon, results)
 
     def _perform_experiment_on_single_ts(self, forecaster, time_series: pd.DataFrame,
                                          horizon: int, validation_blocks: Union[int, None]) -> ForecastResults:
