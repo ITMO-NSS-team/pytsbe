@@ -44,7 +44,7 @@ class TimeSeriesLauncher:
 
             experiments = product(range(self.launches), libraries_to_compare)
             for launch_number, current_library_name in experiments:
-                print(f'Dataset {dataset_name} launch number {launch_number}')
+                print(f'Dataset {dataset_name} launch number {launch_number} for library {current_library_name}')
 
                 # Get helper for serialization procedures for appropriate library
                 current_library_serializer = self.serializer.get(current_library_name)

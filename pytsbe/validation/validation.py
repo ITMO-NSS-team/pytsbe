@@ -3,6 +3,7 @@ import numpy as np
 from typing import Optional, List, Union
 
 from pytsbe.data.data import TimeSeriesDatasets
+from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.timer import BenchmarkTimer
@@ -18,7 +19,7 @@ class Validator:
     Important: responsible for time series (from datasets) and horizons cycles
     """
     forecaster_by_name = {'FEDOT': FedotForecaster,
-                          'AutoTS': None,
+                          'AutoTS': AutoTSForecaster,
                           'TPOT': None,
                           'H2O': None}
 
@@ -69,35 +70,44 @@ class Validator:
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time, 'predict_seconds': self.timer.predict_time}
         else:
             # In-sample validation required
-            validation_block_number = 0
-            results = []
-            for train_values, historical_values_for_test, test_values in in_sample_splitting(time_series,
-                                                                                             horizon,
-                                                                                             validation_blocks):
-                if validation_block_number == 0:
-                    with self.timer.launch_fit():
-                        # Perform training only for first launch
-                        forecaster.fit(train_values, horizon)
-
-                    with self.timer.launch_predict():
-                        # Check run time only for first validation block
-                        forecast_output = forecaster.predict(historical_values=historical_values_for_test,
-                                                             forecast_horizon=horizon)
-                else:
-                    # Make only forecast
-                    forecast_output = forecaster.predict(historical_values=historical_values_for_test,
-                                                         forecast_horizon=horizon)
-
-                forecast_output.true_values = test_values
-                forecast_output.timeouts = {'fit_seconds': self.timer.fit_time,
-                                            'predict_seconds': self.timer.predict_time}
-                results.append(forecast_output)
-                validation_block_number += 1
-
-            # Perform union of in-sample forecasting results
-            forecast_output = ForecastResults.union(results)
+            forecast_output = self._launch_in_sample_validation(forecaster, time_series,
+                                                                horizon, validation_blocks)
 
         self.timer.reset_timers()
+        return forecast_output
+
+    def _launch_in_sample_validation(self, forecaster, time_series: pd.DataFrame,
+                                     horizon: int, validation_blocks: int):
+        """ Launch in sample time series for current time series and forecasting horizon """
+        validation_block_number = 0
+        results = []
+        for train_values, historical_values_for_test, test_values in in_sample_splitting(time_series,
+                                                                                         horizon,
+                                                                                         validation_blocks):
+            if validation_block_number == 0:
+                with self.timer.launch_fit():
+                    # Perform training only for first launch
+                    forecaster.fit(train_values, horizon)
+
+                with self.timer.launch_predict():
+                    # Check run time only for first validation block
+                    forecast_output = forecaster.predict(
+                        historical_values=historical_values_for_test,
+                        forecast_horizon=horizon)
+            else:
+                # Make only forecast
+                forecast_output = forecaster.predict(
+                    historical_values=historical_values_for_test,
+                    forecast_horizon=horizon)
+
+            forecast_output.true_values = test_values
+            forecast_output.timeouts = {'fit_seconds': self.timer.fit_time,
+                                        'predict_seconds': self.timer.predict_time}
+            results.append(forecast_output)
+            validation_block_number += 1
+
+        # Perform union of in-sample forecasting results
+        forecast_output = ForecastResults.union(results)
         return forecast_output
 
 

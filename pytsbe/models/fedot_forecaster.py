@@ -14,10 +14,14 @@ logging.raiseExceptions = False
 
 
 class FedotForecaster(Forecaster):
-    """ Class for time series forecasting with FEDOT framework """
+    """
+    Class for time series forecasting with FEDOT framework
+    Source code:
+    """
 
     def __init__(self, **params):
         super().__init__(**params)
+        # TODO refactor with dictionaries
         self.obtained_pipeline = None
         self.timeout = 5
         if 'timeout' in params:
@@ -34,7 +38,7 @@ class FedotForecaster(Forecaster):
             # Set new preset
             self.predefined_model = params['predefined_model']
 
-    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int):
+    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Train FEDOT framework (launch AutoML algorithm) """
         train_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
 
@@ -46,7 +50,7 @@ class FedotForecaster(Forecaster):
         self.obtained_pipeline = self.model.fit(features=train_data,
                                                 predefined_model=self.predefined_model)
 
-    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int) -> ForecastResults:
+    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
         """ Use obtained pipeline to make predictions """
         historical_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=True)
         forecast = self.model.predict(historical_data)

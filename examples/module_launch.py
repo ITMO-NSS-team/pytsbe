@@ -13,14 +13,14 @@ def launch_example():
     experimenter = TimeSeriesLauncher(working_dir='./example_launch',
                                       datasets=['FRED', 'TEP', 'SMART'],
                                       launches=5)
-    experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'H2O', 'TPOT'],
+    experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS'],
                                     horizons=[10],
                                     libraries_params={'H2O': {'timeout': 2, 'max_models': 10},
                                                       'TPOT': {'timeout': 2, 'generations': 50, 'population_size': 16},
                                                       'FEDOT': {'preset': 'ts', 'timeout': 2, 'predefined_model': 'auto'},
                                                       'AutoTS': {'frequency': 'infer', 'prediction_interval': 0.9,
                                                                  'ensemble': 'all', 'model_list': 'default',
-                                                                 'max_generations': 10, 'num_validations': 3}},
+                                                                 'max_generations': 1, 'num_validations': 3}},
                                     validation_blocks=2,
                                     clip_border=500)
 
