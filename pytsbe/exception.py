@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 from typing import Union
-import functools
 
 
 class ExceptionHandler:
