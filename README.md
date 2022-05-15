@@ -9,20 +9,24 @@ for forecasting univariate and multivariate time series.
 ### Univariate time series 
 
 The repository includes the following libraries and models for comparison:
-- [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports the time series forecasting task
-- [AutoTS](https://github.com/winedarksea/AutoTS) - Automated time series forecasting library
-- [pmdarima](https://github.com/alkaline-ml/pmdarima) - A statistical library to fit ts models
-- [prophet](https://github.com/facebook/prophet) - a procedure for forecasting time series data based on an additive model
-- [H2O](https://github.com/h2oai/h2o-3) - (lagged transformation + H2O) AutoML platform for tabular data
-- [TPOT](https://github.com/EpistasisLab/tpot) - (lagged transformation + TPOT) Tree-based Pipeline Optimization Tool. AutoML library for tabular data
-- naive forecaster - repeat last observation
-- naive forecaster - forecasts the average value of the time series
-- naive forecaster ETS - Simple exponential smoothing model
+- [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports the time series forecasting task. Name in the repository `FEDOT`.
+- [AutoTS](https://github.com/winedarksea/AutoTS) - Automated time series forecasting library. Name in the repository `AutoTS`.
+- [pmdarima](https://github.com/alkaline-ml/pmdarima) - A statistical library to fit ts models. Name in the repository `pmdarima`.
+- [prophet](https://github.com/facebook/prophet) - a procedure for forecasting time series data based on an additive model. Name in the repository `prophet`.
+- [H2O](https://github.com/h2oai/h2o-3) - (lagged transformation + H2O) AutoML platform for tabular data. Name in the repository `H2O`.
+- [TPOT](https://github.com/EpistasisLab/tpot) - (lagged transformation + TPOT) Tree-based Pipeline Optimization Tool. AutoML library for tabular data. Name in the repository `TPOT`.
+- naive forecaster - repeat last observation. Name in the repository `repeat_last`.
+- naive forecaster - forecasts the average value of the time series. Name in the repository `average`.
+- naive forecaster ETS - Simple exponential smoothing model. Name in the repository `ets`.
 
 Available datasets (check data folder): 
-- [FRED](./data/fred.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting of economic data time series (source [link](https://fred.stlouisfed.org/))
-- [TEP](./data/tep.csv) ([license](https://github.com/YKatser/CPDE/tree/master/TEP_data)) - Tennessee Eastman Process (TEP) is a model of the industrial chemical process (source [link](https://paperswithcode.com/dataset/tep))
-- [SMART](./data/smart.csv) - the readings with a time span of 1 minute of house appliances in kW from a smart meter and weather conditions (source [link](https://www.kaggle.com/datasets/taranvee/smart-home-dataset-with-weather-information))
+- [FRED](./data/fred.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting 
+  of economic data time series (source [link](https://fred.stlouisfed.org/)). Name in the repository `FRED`.
+- [TEP](./data/tep.csv) ([license](https://github.com/YKatser/CPDE/tree/master/TEP_data)) - Tennessee Eastman Process (TEP) is a
+  model of the industrial chemical process (source [link](https://paperswithcode.com/dataset/tep)). Name in the repository `TEP`.
+- [SMART](./data/smart.csv) - the readings with a time span of 1 minute of house appliances in kW from a 
+  smart meter and weather conditions (source [link](https://www.kaggle.com/datasets/taranvee/smart-home-dataset-with-weather-information)). 
+  Name in the repository `SMART`.
 
 Below is a brief description of datasets:
 
@@ -46,6 +50,8 @@ See [documentation](./docs) for a more detailed explanation.
 
 ## Results table
 
+According to our experiments.
+
 In progress
 
 ## Contributing 
@@ -60,7 +66,7 @@ Follow these steps to make the changes:
 - Create a pull request and ask our team to review it
 - After the code review, correct our notes and merge the code into the main branch
 
-And check [contribution guide](./docs/contribute.md) for more details. 
+And check [contribution guide](docs/contributing.md) for more details. 
 
 ## Citation 
 

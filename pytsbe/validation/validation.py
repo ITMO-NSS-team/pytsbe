@@ -6,8 +6,10 @@ from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.exception import ExceptionHandler
 from pytsbe.models.autots_forecaster import AutoTSForecaster
+from pytsbe.models.average import NaiveAverage
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
+from pytsbe.models.naive_repeater import NaiveRepeatLastValue
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.timer import BenchmarkTimer
 
@@ -24,8 +26,8 @@ class Validator:
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
-                          'TPOT': None,
-                          'H2O': None}
+                          'repeat_last': NaiveRepeatLastValue,
+                          'average': NaiveAverage}
 
     def __init__(self, dataset_name: str, launch_number: int, library_name: str,
                  library_parameters: dict, library_serializer):
