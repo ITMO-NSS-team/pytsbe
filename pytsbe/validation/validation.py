@@ -8,6 +8,7 @@ from pytsbe.exception import ExceptionHandler
 from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.data.forecast_output import ForecastResults
+from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.timer import BenchmarkTimer
 
 import warnings
@@ -22,6 +23,7 @@ class Validator:
     """
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'AutoTS': AutoTSForecaster,
+                          'pmdarima': ARIMAForecaster,
                           'TPOT': None,
                           'H2O': None}
 
@@ -50,7 +52,12 @@ class Validator:
         for i, time_series in enumerate(dataset.time_series):
             ts_label = dataset.labels[i]
 
-            forecaster = self.forecaster_by_name[self.library_name](**self.library_parameters)
+            # Initialise forecaster
+            if self.library_parameters is not None:
+                forecaster = self.forecaster_by_name[self.library_name](**self.library_parameters)
+            else:
+                forecaster = self.forecaster_by_name[self.library_name]()
+
             for horizon in horizons:
                 if self.launch_status_checker.was_case_finished(ts_label, horizon):
                     # Already finish calculation - skip this case
