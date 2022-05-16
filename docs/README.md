@@ -25,23 +25,29 @@ when writing scientific papers).
 - Various time series and libraries have already been integrated into 
   the repository, and the wrappers have been tested and are ready for use
 
-<img src="./images/features_1.png" width="900"/> 
+<img src="./images/features_1.png" width="950"/> 
 
 - Ability to perform validation both on the last segment 
   of the time series and to use in-sample forecasting
   
-<img src="./images/features_2.png" width="900"/> 
+<img src="./images/features_2.png" width="950"/> 
 
 - While it is running, the algorithm saves the conditions of the experiment
   so that it can be reproduced in the future (saves a configuration file) 
 
-<img src="./images/features_3.png" width="900"/>
+<img src="./images/features_3.png" width="950"/>
 
 - The algorithm will continue to work even if the model fails during the calculations. 
   Then the result for this case will not be generated and the algorithm moves on to the next 
+  
+<img src="./images/features_4.png" width="950"/>
+
 - Ability to restart experiments if they were previously stopped 
   for unexpected reasons. In this case, the algorithm will check which cases have already been calculated and start from where it left off
-- If you re-run the experiment in the existing working directory and change the experiment coditions, the module will detect the problem
+  
+<img src="./images/features_5.png" width="950"/>
+
+- If you re-run the experiment in the existing working directory and change the experiment conditions, the module will detect the problem
   (compare it to the existing configuration file) and warn you
 
 ## Quick start
