@@ -103,6 +103,7 @@ class TimeSeriesLauncher:
                 if set(value) != set(old_value):
                     raise ValueError(message)
             else:
+                # It's dict pr value (int or float)
                 if value != old_value:
                     raise ValueError(message)
 
