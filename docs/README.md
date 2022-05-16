@@ -25,12 +25,18 @@ when writing scientific papers).
 - Various time series and libraries have already been integrated into 
   the repository, and the wrappers have been tested and are ready for use
 
-<img src="./images/features_1.png" width="700"/> 
+<img src="./images/features_1.png" width="900"/> 
 
 - Ability to perform validation both on the last segment 
   of the time series and to use in-sample forecasting
+  
+<img src="./images/features_2.png" width="900"/> 
+
 - While it is running, the algorithm saves the conditions of the experiment
   so that it can be reproduced in the future (saves a configuration file) 
+
+<img src="./images/features_3.png" width="900"/>
+
 - The algorithm will continue to work even if the model fails during the calculations. 
   Then the result for this case will not be generated and the algorithm moves on to the next 
 - Ability to restart experiments if they were previously stopped 
