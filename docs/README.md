@@ -25,7 +25,7 @@ when writing scientific papers).
 - Various time series and libraries have already been integrated into 
   the repository, and the wrappers have been tested and are ready for use
 
-<img src="./images/features_1.png" width="500"/> 
+<img src="./images/features_1.png" width="700"/> 
 
 - Ability to perform validation both on the last segment 
   of the time series and to use in-sample forecasting
