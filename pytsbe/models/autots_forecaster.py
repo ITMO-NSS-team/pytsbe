@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
 
-from autots import AutoTS, model_forecast
+try:
+    from autots import AutoTS, model_forecast
+except ImportError:
+    print('Does not found AutoTS library. Continue...')
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster

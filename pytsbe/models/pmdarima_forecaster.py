@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
 
-import pmdarima as pm
+try:
+    import pmdarima as pm
+except ImportError:
+    print('Does not found pmdarima library. Continue...')
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster

@@ -13,7 +13,7 @@ def launch_example():
     experimenter = TimeSeriesLauncher(working_dir='./example_launch',
                                       datasets=['FRED', 'TEP', 'SMART'],
                                       launches=5)
-    experimenter.perform_experiment(libraries_to_compare=['ets'],
+    experimenter.perform_experiment(libraries_to_compare=['prophet'],
                                     horizons=[10],
                                     libraries_params={'H2O': {'timeout': 2, 'max_models': 10},
                                                       'TPOT': {'timeout': 2, 'generations': 50, 'population_size': 16},

@@ -8,7 +8,7 @@ import logging
 logging.raiseExceptions = False
 
 
-class NaiveAverage(Forecaster):
+class NaiveAverageForecaster(Forecaster):
     """
     Class for naive time series forecasting. Forecast mean time series value
     """

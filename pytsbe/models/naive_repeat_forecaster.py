@@ -8,7 +8,7 @@ import logging
 logging.raiseExceptions = False
 
 
-class NaiveRepeatLastValue(Forecaster):
+class NaiveRepeatLastValueForecaster(Forecaster):
     """
     Class for naive time series forecasting. Repeat last observation n times
     """

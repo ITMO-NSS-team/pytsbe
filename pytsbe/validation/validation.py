@@ -6,12 +6,13 @@ from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.exception import ExceptionHandler
 from pytsbe.models.autots_forecaster import AutoTSForecaster
-from pytsbe.models.average_forecaster import NaiveAverage
+from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.ets_forecaster import ETSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
-from pytsbe.data.forecast_output import ForecastResults
-from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValue
+from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
+from pytsbe.models.prophet_forecaster import ProphetForecaster
+from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.timer import BenchmarkTimer
 
 import warnings
@@ -27,9 +28,10 @@ class Validator:
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
-                          'repeat_last': NaiveRepeatLastValue,
-                          'average': NaiveAverage,
-                          'ets': ETSForecaster}
+                          'repeat_last': NaiveRepeatLastValueForecaster,
+                          'average': NaiveAverageForecaster,
+                          'ets': ETSForecaster,
+                          'prophet': ProphetForecaster}
 
     def __init__(self, dataset_name: str, launch_number: int, library_name: str,
                  library_parameters: dict, library_serializer):

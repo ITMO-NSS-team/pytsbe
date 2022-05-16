@@ -2,8 +2,6 @@
 
 Welcome to the main documentation page of **pytsbe** library. 
 
----
-
 ## Useful features (why you should try pytsbe)
 
 The module allows a variety of experiments to be carried 
@@ -11,7 +9,7 @@ out on different time series, as well as flexible configuration
 of experiment conditions and library parameters.
 
 The evaluation process is divided into two parts: running
-experiments and calculating metrics. During the first stage,
+experiments and creating report (calculating metrics and display plots). During the first stage,
 csv files with model predictions are generated, 
 as well as json files with `fit` and `predict` method execution times for 
 each model / library. Once the experiments have been completed, the library 
@@ -58,21 +56,24 @@ In progress
 
 In progress
 
-## Algorithm output 
+## Running experiments stage algorithm output 
 
-In progress
+A large number of nested folders are generated during execution. The hierarchy is always as follows: 
+`Dataset name -> Launch number -> Library name (model name)`. Remember that each dataset contains 
+several time series. And at the same time for each time series it is necessary to perform several 
+experiments with different forecast horizons. 
+So, each such folder will store algorithm predictions (csv) and time measurements 
+(json). The file names are formed as follows: `<time series label>_<forecast horizon>_forecast_vs_actual.csv`
+and `<time series label>_<forecast horizon>_timeouts.json`. Additional objects can also be stored in the folder 
+(check serializers). 
 
-## Creating reports
+## Preparing report stage. Creating reports
 
 In progress 
 
-## Report visualisation
+## Preparing report stage. Report visualisation
 
 In progress 
-
-## Brief architecture description
-
-In progress
 
 ## Contributing
 

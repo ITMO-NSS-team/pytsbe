@@ -3,7 +3,10 @@ import numpy as np
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing
+try:
+    from statsmodels.tsa.holtwinters import SimpleExpSmoothing
+except ImportError:
+    print('Does not found statsmodels library. Continue...')
 
 import logging
 logging.raiseExceptions = False
@@ -12,7 +15,7 @@ logging.raiseExceptions = False
 class ETSForecaster(Forecaster):
     """
     Class for time series forecasting with exponential smoothing
-    Source code:
+    Source code: https://github.com/statsmodels/statsmodels
     """
 
     def __init__(self, **params):

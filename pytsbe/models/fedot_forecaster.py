@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
-from fedot.api.main import Fedot
 
-from fedot.core.data.data import InputData
-from fedot.core.repository.tasks import Task, TaskTypesEnum, TsForecastingParams
-from fedot.core.repository.dataset_types import DataTypesEnum
+try:
+    from fedot.api.main import Fedot
+    from fedot.core.data.data import InputData
+    from fedot.core.repository.tasks import Task, TaskTypesEnum, TsForecastingParams
+    from fedot.core.repository.dataset_types import DataTypesEnum
+except ImportError:
+    print('Does not found FEDOT library. Continue...')
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
