@@ -50,7 +50,45 @@ when writing scientific papers).
 
 ## Quick start
 
-In progress
+The `TimeSeriesLauncher` class is used to run the experiments.  
+
+### Initialization parameters
+
+`working_dir` - directory for saving algorithm output. If the directory does not exist, it will be created
+
+`datasets` - a list of dataset names.
+
+`launches` - number of launches to perform.
+
+### perform_experiment method parameters
+
+`libraries_to_compare` - a list of libraries names.
+
+`horizons` - a list of forecast horizons names
+
+`libraries_params` - dictionary with parameters for libraries.
+
+`validation_blocks` - validation blocks for in-sample forecasting. If None or 1 - simple validation is made.
+
+`clip_border` - number of elements to remain in time series if there is a need to clip time series (if None - there is no cropping).
+
+Usage example:
+```Python
+from pytsbe.main import TimeSeriesLauncher
+
+experimenter = TimeSeriesLauncher(working_dir='./output',
+                                  datasets=['FRED', 'TEP', 'SMART'],
+                                  launches=2)
+
+experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'pmdarima', 'repeat_last'],
+                                horizons=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                                libraries_params={'FEDOT': {'preset': 'ts', 'timeout': 2, 'predefined_model': 'auto'},
+                                                  'AutoTS': {'frequency': 'infer', 'prediction_interval': 0.9,
+                                                             'ensemble': 'all', 'model_list': 'default',
+                                                             'max_generations': 1, 'num_validations': 3}},
+                                validation_blocks=3,
+                                clip_border=1000)
+```
 
 ## Advanced features
 

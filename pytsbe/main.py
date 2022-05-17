@@ -38,7 +38,8 @@ class TimeSeriesLauncher:
         :param libraries_params: parameters for libraries. Important parameter 'timeout' for AutoML
         libraries must be in minutes (float type)
         :param validation_blocks: validation blocks for in-sample forecasting
-        :param clip_border: is there a need to clip time series (if None - there is no cropping)
+        :param clip_border: number of elements to remain in time series if there
+        is a need to clip time series (if None - there is no cropping)
         """
         if os.path.exists(self.path_to_config_json):
             # Experiments hase been previously configured - check the relevance

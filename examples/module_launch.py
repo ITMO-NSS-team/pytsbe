@@ -6,7 +6,6 @@ def launch_example():
     Example how to launch benchmark with several libraries with different parameters.
 
     working_dir - directory for saving results
-    datasets_info - dictionary with information about datasets
     launches - number of launches for averaging
     For more detailed info check documentation or docstring descriptions in classes below.
     """

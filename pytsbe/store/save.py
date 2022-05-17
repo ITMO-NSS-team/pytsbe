@@ -2,6 +2,7 @@ import os
 
 from typing import List
 
+from pytsbe.store.automl_serializer import AutoMLSerializer
 from pytsbe.store.default_serializer import DefaultLibrarySerializer
 from pytsbe.store.fedot_serializer import FedotSerializer
 from pytsbe.store.utils import create_folder

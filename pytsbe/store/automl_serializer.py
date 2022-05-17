@@ -5,7 +5,6 @@ import os
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.store.default_serializer import DefaultLibrarySerializer
-from pytsbe.store.utils import create_folder
 
 
 class AutoMLSerializer(DefaultLibrarySerializer):
