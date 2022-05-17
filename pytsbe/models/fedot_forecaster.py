@@ -6,6 +6,8 @@ try:
     from fedot.core.data.data import InputData
     from fedot.core.repository.tasks import Task, TaskTypesEnum, TsForecastingParams
     from fedot.core.repository.dataset_types import DataTypesEnum
+    from fedot.core.pipelines.node import PrimaryNode, SecondaryNode
+    from fedot.core.pipelines.pipeline import Pipeline
 except ImportError:
     print('Does not found FEDOT library. Continue...')
 
@@ -86,3 +88,11 @@ def prepare_input_ts_data(historical_values: pd.DataFrame, forecast_horizon: int
                                task=task, data_type=DataTypesEnum.ts)
 
     return input_data
+
+
+def get_simple_pipeline():
+    """ Create pipeline with lagged transformation and decision tree regression """
+    lagged_node = PrimaryNode('lagged')
+    dtreg_node = SecondaryNode('dtreg', nodes_from=[lagged_node])
+    pipeline = Pipeline(dtreg_node)
+    return pipeline

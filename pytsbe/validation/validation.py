@@ -5,10 +5,12 @@ from typing import Optional, List, Union
 from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.exception import ExceptionHandler
+from pytsbe.models.automl_forecasters.tpot_forecaster import TPOTForecaster
 from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.ets_forecaster import ETSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
+from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.models.prophet_forecaster import ProphetForecaster
@@ -28,10 +30,12 @@ class Validator:
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
+                          'prophet': ProphetForecaster,
+                          'H2O': H2OForecaster,
+                          'TPOT': TPOTForecaster,
                           'repeat_last': NaiveRepeatLastValueForecaster,
                           'average': NaiveAverageForecaster,
-                          'ets': ETSForecaster,
-                          'prophet': ProphetForecaster}
+                          'ets': ETSForecaster}
 
     def __init__(self, dataset_name: str, launch_number: int, library_name: str,
                  library_parameters: dict, library_serializer):
@@ -70,12 +74,12 @@ class Validator:
                     continue
 
                 exception_handler = ExceptionHandler(ts_label, horizon)
-                with exception_handler.safe_process_launch():
-                    # Prepare model for current forecast horizon
-                    results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
+                # with exception_handler.safe_process_launch():
+                # Prepare model for current forecast horizon
+                results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
 
-                    # Save all the necessary results
-                    self.library_serializer.save_information(ts_label, horizon, results)
+                # Save all the necessary results
+                self.library_serializer.save_information(ts_label, horizon, results)
 
     def _perform_experiment_on_single_ts(self, forecaster, time_series: pd.DataFrame,
                                          horizon: int, validation_blocks: Union[int, None]) -> ForecastResults:
@@ -94,7 +98,8 @@ class Validator:
                 forecaster.fit(train_values, horizon)
             with self.timer.launch_predict():
                 forecast_output = forecaster.predict(historical_values=historical_values_for_test,
-                                                     forecast_horizon=horizon)
+                                                     forecast_horizon=horizon,
+                                                     future_indices=test_values['datetime'])
             # Update result with additional information
             forecast_output.true_values = test_values
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time, 'predict_seconds': self.timer.predict_time}
@@ -121,14 +126,14 @@ class Validator:
 
                 with self.timer.launch_predict():
                     # Check run time only for first validation block
-                    forecast_output = forecaster.predict(
-                        historical_values=historical_values_for_test,
-                        forecast_horizon=horizon)
+                    forecast_output = forecaster.predict(historical_values=historical_values_for_test,
+                                                         forecast_horizon=horizon,
+                                                         future_indices=test_values['datetime'])
             else:
                 # Make only forecast
-                forecast_output = forecaster.predict(
-                    historical_values=historical_values_for_test,
-                    forecast_horizon=horizon)
+                forecast_output = forecaster.predict(historical_values=historical_values_for_test,
+                                                     forecast_horizon=horizon,
+                                                     future_indices=test_values['datetime'])
 
             forecast_output.true_values = test_values
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time,

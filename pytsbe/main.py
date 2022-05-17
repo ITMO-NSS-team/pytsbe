@@ -35,7 +35,8 @@ class TimeSeriesLauncher:
 
         :param libraries_to_compare: list with libraries for comparison
         :param horizons: forecast horizons to process
-        :param libraries_params: parameters for libraries
+        :param libraries_params: parameters for libraries. Important parameter 'timeout' for AutoML
+        libraries must be in minutes (float type)
         :param validation_blocks: validation blocks for in-sample forecasting
         :param clip_border: is there a need to clip time series (if None - there is no cropping)
         """

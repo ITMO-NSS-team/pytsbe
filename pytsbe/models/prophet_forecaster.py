@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
@@ -33,7 +34,8 @@ class ProphetForecaster(Forecaster):
 
     def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
         """ Use fitted model to prepare forecast """
-        future = self.model.make_future_dataframe(periods=forecast_horizon,
-                                                  include_history=False)
-        # TODO fix for in-sample forecasting
-        raise NotImplementedError()
+        future = kwargs['future_indices']
+        future = pd.DataFrame({'ds': future})
+
+        forecast_df = self.model.predict(future)
+        return ForecastResults(predictions=np.array(forecast_df['yhat']))

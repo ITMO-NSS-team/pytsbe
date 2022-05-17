@@ -10,7 +10,9 @@ from pytsbe.store.utils import create_folder
 class Serialization:
     """ Class for creating folders and preparing particular serializers for libraries """
     lib_serializers_by_name = {'default': DefaultLibrarySerializer,
-                               'FEDOT': FedotSerializer}
+                               'FEDOT': FedotSerializer,
+                               'TPOT': AutoMLSerializer,
+                               'H2O': AutoMLSerializer}
 
     def __init__(self, working_dir: str):
         self.working_dir = os.path.abspath(working_dir)
