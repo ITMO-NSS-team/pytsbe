@@ -82,7 +82,7 @@ experimenter = TimeSeriesLauncher(working_dir='./output',
 
 experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'pmdarima', 'repeat_last'],
                                 horizons=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-                                libraries_params={'FEDOT': {'preset': 'ts', 'timeout': 2, 'predefined_model': 'auto'},
+                                libraries_params={'FEDOT': {'preset': 'ts', 'timeout': 2},
                                                   'AutoTS': {'frequency': 'infer', 'prediction_interval': 0.9,
                                                              'ensemble': 'all', 'model_list': 'default',
                                                              'max_generations': 1, 'num_validations': 3}},
