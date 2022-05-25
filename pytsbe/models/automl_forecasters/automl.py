@@ -59,7 +59,7 @@ class AutoMLForecaster(Forecaster):
         return ForecastResults(predictions=np.ravel(np.array(forecast.predict)),
                                additional_info={'lagged_window_size': window_size})
 
-    def _substitute_automl_training(self, input_data: InputData):
+    def _substitute_automl_training(self, input_data: 'InputData'):
         """
         Using simple pipeline, tune lagged operation and then replace final model (decision tree)
         with AutoML as operation in the node

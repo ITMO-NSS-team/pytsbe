@@ -1,3 +1,7 @@
+from typing import Union
+
+from pytsbe.report.preparers.metrics import collect_metrics_table
+from pytsbe.report.preparers.timeouts import collect_timeouts_table
 from pytsbe.report.walk import FolderWalker
 
 
@@ -7,8 +11,33 @@ class MetricsReport:
     def __init__(self, working_dir: str):
         self.walker = FolderWalker(working_dir)
 
-    def time_execution_table(self, batch_horizons: dict = None):
-        pass
+    def time_execution_table(self, aggregation: Union[str, list] = None):
+        """
+        Get dataframe with desired aggregation and information about timeouts
 
-    def metric_table(self):
-        pass
+        :param aggregation: name of column for aggregation or several columns.
+        Possible variants: 'Dataset', 'Launch', 'Library', 'Label', 'Horizon'
+        If None, return full column.
+        """
+        timeouts_table = collect_timeouts_table(self.walker)
+        if aggregation is None:
+            return timeouts_table
+
+        aggregated = timeouts_table.groupby(by=aggregation).agg({'Fit, seconds': 'mean',
+                                                                 'Predict, seconds': 'mean'})
+        aggregated = aggregated.reset_index()
+        return aggregated
+
+    def metric_table(self, metrics: Union[str, list], aggregation: Union[str, list] = None):
+        """ Prepare table with desired metrics """
+        if isinstance(metrics, str):
+            metrics = [metrics]
+
+        metric_table = collect_metrics_table(self.walker, metrics)
+        if aggregation is None:
+            return metric_table
+
+        aggregation_columns = dict.fromkeys(metrics, 'mean')
+        aggregated = metric_table.groupby(by=aggregation).agg(aggregation_columns)
+        aggregated = aggregated.reset_index()
+        return aggregated
