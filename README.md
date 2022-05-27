@@ -44,7 +44,14 @@ And visualisations:
 
 ### Multivariate time series 
 
-In progress 
+At the moment, the repository contains one dataset of multivariate time series forecasting:
+- [SSH](./data/multivariate_ssh.csv) - Data were collected by simulating the sea surface height (SSH) using NEMO 
+(Nucleus for European Modelling of the Ocean) model.
+The data contain measurements of sea level (in meters) in different geographical locations. For each time series, the 
+coordinates (x and y) and the label are known. For each series, it is required to generate a forecast based on the previous 
+values of the current and all other time series. 
+Name in the repository `SSH`.
+
 
 ## Documentation
 
