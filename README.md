@@ -52,6 +52,10 @@ coordinates (x and y) and the label are known. For each series, it is required t
 values of the current and all other time series. 
 Name in the repository `SSH`.
 
+The picture below shows the location of the time series and shows examples of the structures of some of them.
+
+<img src="./docs/images/ssh_description.png" width="900"/> 
+
 
 ## Documentation
 
