@@ -15,7 +15,8 @@ def get_data_path() -> str:
 def get_path_for_dataset(dataset_name: str):
     path_by_dataset_name = {'FRED': os.path.join(get_data_path(), 'fred.csv'),
                             'SMART': os.path.join(get_data_path(), 'smart.csv'),
-                            'TEP': os.path.join(get_data_path(), 'tep.csv')}
+                            'TEP': os.path.join(get_data_path(), 'tep.csv'),
+                            'SSH': os.path.join(get_data_path(), 'multivariate_ssh.csv')}
     return path_by_dataset_name[dataset_name]
 
 

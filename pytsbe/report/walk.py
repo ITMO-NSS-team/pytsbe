@@ -4,8 +4,9 @@ import os
 
 class FolderWalker:
     """
-    Check folder with results. Walk through the folders
-    and define paths to various files.
+    Check folder with results. Walk through the folders and define paths to various files.
+    If any values are not counted in one of the frameworks, they will be excluded in competitors.
+    Thus, the class ensures consistency of results in the analysis.
     """
 
     def __init__(self, working_dir: str):
@@ -39,6 +40,11 @@ class FolderWalker:
                     all_additional_paths = self.find_additional_files(validation_case_path)
                     if all_additional_paths is not None:
                         self.additional_files.update({case_id: all_additional_paths})
+
+        self.exclude_mismatched_results()
+
+    def exclude_mismatched_results(self):
+        pass
 
     @staticmethod
     def find_files(folder_with_files: str, search_pattern: str):

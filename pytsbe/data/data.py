@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Dict
 from dataclasses import dataclass
 
 import pandas as pd
@@ -9,7 +9,7 @@ from pytsbe.paths import get_path_for_dataset
 
 @dataclass
 class TimeSeriesDatasets:
-    """ Class for time series datasets preparing. Parse csv files with time series and prepearing """
+    """ Class for time series datasets preparing. Parse csv files with time series and preparing """
     # Time series for experiments
     time_series: Union[List[np.array], List[pd.DataFrame]]
     # Labels for every dataset, list must matching
@@ -93,3 +93,33 @@ class TimeSeriesDatasets:
                 labels.append(i)
 
         return TimeSeriesDatasets(time_series=datasets, labels=labels)
+
+
+@dataclass
+class MultivariateTimeSeriesDatasets:
+    """ Class for multivariate time series datasets preparing """
+    # Labels for target time series
+    labels: List[str]
+    # Table with all time series
+    dataframe: pd.DataFrame
+    clip_border: Union[None, int]
+
+    @staticmethod
+    def configure_dataset_from_path(dataset_name: str, clip_border: int = None):
+        """ Prepare list with time series names based on dataset name
+
+        :param dataset_name: name of dataset to parse
+        :param clip_border: is there a need to clip time series (if None - there is no cropping)
+        """
+        dataset_path = get_path_for_dataset(dataset_name)
+        df = pd.read_csv(dataset_path, parse_dates=['datetime'])
+        labels = list(df['label'].unique())
+        labels.sort()
+
+        return MultivariateTimeSeriesDatasets(labels=labels, dataframe=df, clip_border=clip_border)
+
+    @property
+    def time_series(self):
+        """ Return target time series and features (exogenous) """
+        # TODO add possibility to use multivariate time series
+        raise NotImplementedError()

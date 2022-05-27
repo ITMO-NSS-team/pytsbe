@@ -107,7 +107,35 @@ and `<time series label>_<forecast horizon>_timeouts.json`. Additional objects c
 
 ## Preparing report stage. Creating reports
 
-In progress 
+The `MetricsReport` class is used to generate summary tables. The module allows 
+to obtain common tables with metrics without any transformation, as well as performing aggregation.
+The generated tables can be used in your custom analysis external to this module. 
+Usage example: [`prepare_report.py`](../examples/prepare_report.py)
+
+Examples of generated tables: 
+
+**Execution time** 
+
+| Library      | Dataset | Fit, seconds | Predict, seconds |
+| :----------: | :-----: | :----------: | :--------------: |
+| FEDOT        | FRED    | 0\.12        | 0\.01            |
+| FEDOT        | SMART   | 0\.12        | 0\.01            |
+| repeat\_last | FRED    | 0\.0         | 0\.0             |
+| repeat\_last | SMART   | 0\.0         | 0\.0             |
+
+**Metrics on validation sample**
+
+| Library      | Dataset | Horizon | MAE     | SMAPE |
+| :----------: | :-----: | :-----: | :-----: | :---: |
+| FEDOT        | FRED    | 10      | 2273\.4 | 7\.7  |
+| FEDOT        | FRED    | 50      | 6919\.0 | 17\.3 |
+| FEDOT        | SMART   | 10      | 0\.2    | 52\.6 |
+| FEDOT        | SMART   | 50      | 0\.4    | 75\.5 |
+| repeat\_last | FRED    | 10      | 2126\.1 | 10\.3 |
+| repeat\_last | FRED    | 50      | 2747\.1 | 10\.3 |
+| repeat\_last | SMART   | 10      | 0\.1    | 13\.1 |
+| repeat\_last | SMART   | 50      | 0\.2    | 32\.5 |
+
 
 ## Preparing report stage. Report visualisation
 
