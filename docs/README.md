@@ -139,7 +139,18 @@ Examples of generated tables:
 
 ## Preparing report stage. Report visualisation
 
-In progress 
+The `Visualizer` class is used to generate simple visualizations. 
+Usage example: [`prepare_visualizations.py`](../examples/prepare_visualizations.py)
+
+Examples of generated plots: 
+
+**Execution time for fit method in seconds ** 
+
+<img src="./images/execution_time_fit_vis.png" width="850"/>
+
+**SMAPE metric on validation sample**
+
+<img src="./images/smape_vis.png" width="850"/>
 
 ## Contributing
 
