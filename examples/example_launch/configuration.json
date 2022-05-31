@@ -1,1 +1,0 @@
-{"Datasets": ["FRED", "SMART"], "Launches": 2, "Libraries to compare": ["FEDOT", "repeat_last"], "Libraries parameters": {"FEDOT": {"preset": "ts", "timeout": 2, "predefined_model": "auto"}}, "Horizons": [10, 50], "Validation blocks": 2, "Clip border": 500}

@@ -56,6 +56,9 @@ The picture below shows the location of the time series and shows examples of th
 
 <img src="./docs/images/ssh_description.png" width="900"/> 
 
+The model is designed to iteratively generate a forecast for each time series in the dataset.
+ It is possible to use the historical values of not only the target series but 
+ also the neighboring (exogenous time series).
 
 ## Documentation
 
