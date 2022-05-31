@@ -38,7 +38,7 @@ class AutoMLForecaster(Forecaster):
         self.timeout_for_tuning = None
         self.remained_timeout = None
 
-    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
+    def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         try:
             with OperationTypesRepository.init_automl_repository() as repo:
                 train_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
@@ -48,7 +48,13 @@ class AutoMLForecaster(Forecaster):
             train_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
             self.obtained_pipeline = self._substitute_automl_training(train_data)
 
-    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
+    def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                            target_column: str, exogenous_columns: list, **kwargs):
+        raise NotImplementedError('AutoML tools (TPOT and H2O) does not support fit '
+                                  'for multivariate time series forecasting')
+
+    def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                              **kwargs) -> ForecastResults:
         """ Use fitted model to prepare forecast """
         historical_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=True)
         forecast = self.obtained_pipeline.predict(historical_data)
@@ -58,6 +64,11 @@ class AutoMLForecaster(Forecaster):
 
         return ForecastResults(predictions=np.ravel(np.array(forecast.predict)),
                                additional_info={'lagged_window_size': window_size})
+
+    def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                                target_column: str, exogenous_columns: list, **kwargs):
+        raise NotImplementedError('AutoML tools (TPOT and H2O) does not support predict '
+                                  'for multivariate time series forecasting')
 
     def _substitute_automl_training(self, input_data: 'InputData'):
         """

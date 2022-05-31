@@ -1,4 +1,4 @@
-from typing import List, Union, Dict
+from typing import List, Union
 from dataclasses import dataclass
 
 import pandas as pd
@@ -116,10 +116,14 @@ class MultivariateTimeSeriesDatasets:
         labels = list(df['label'].unique())
         labels.sort()
 
+        df = df.pivot(index='datetime', columns='label', values='value')
+        df = df.reset_index()
+        df = df.sort_values(by='datetime')
+
         return MultivariateTimeSeriesDatasets(labels=labels, dataframe=df, clip_border=clip_border)
 
     @property
     def time_series(self):
         """ Return target time series and features (exogenous) """
-        # TODO add possibility to use multivariate time series
-        raise NotImplementedError()
+        for ts_label in self.labels:
+            yield self.dataframe.rename(columns={ts_label: f'target_{ts_label}'})

@@ -92,7 +92,7 @@ experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'pmdari
 
 ## Advanced features
 
-In progress
+You can run the benchmark on multivariate time series just the same as for univariate time series. 
 
 ## Running experiments stage algorithm output 
 

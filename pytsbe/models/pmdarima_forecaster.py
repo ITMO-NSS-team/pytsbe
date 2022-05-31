@@ -31,7 +31,7 @@ class ARIMAForecaster(Forecaster):
         else:
             self.params = default_params
 
-    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
+    def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         time_series = np.array(historical_values['value'])
         self.model = pm.auto_arima(time_series, start_p=self.params['start_p'],
                                    start_q=self.params['start_q'], d=self.params['d'],
@@ -41,10 +41,19 @@ class ARIMAForecaster(Forecaster):
                                    seasonal=self.params['seasonal'], trace=self.params['trace'],
                                    maxiter=self.params['maxiter'])
 
-    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
+    def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                            target_column: str, exogenous_columns: list, **kwargs):
+        raise NotImplementedError('pmdarima does not support fit for multivariate time series forecasting')
+
+    def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                              **kwargs) -> ForecastResults:
         """ Use obtained model to make predictions """
         # Update model weights
         self.model.update(np.array(historical_values['value']))
         predicted_ts = self.model.predict(forecast_horizon,
                                           return_conf_int=False)
         return ForecastResults(predictions=predicted_ts)
+
+    def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                                target_column: str, exogenous_columns: list, **kwargs):
+        raise NotImplementedError('pmdarima does not support predict for multivariate time series forecasting')

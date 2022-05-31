@@ -12,7 +12,6 @@ class Forecaster:
         self.params = params
         self.model = None
 
-    @abstractmethod
     def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Fit model (or library) with desired parameters
 
@@ -24,9 +23,57 @@ class Forecaster:
         :param forecast_horizon: forecast length
         :param kwargs: additional parameters
         """
+        n_rows, n_cols = historical_values.shape
+
+        if n_cols > 2:
+            # Multivariate time series forecasting
+            target_column, exogenous_columns = find_target_and_exog_variables(historical_values)
+            return self.fit_multivariate_ts(historical_values, forecast_horizon,
+                                            target_column, exogenous_columns, **kwargs)
+        else:
+            # Univariate time series forecasting
+            return self.fit_univariate_ts(historical_values, forecast_horizon, **kwargs)
+
+    @abstractmethod
+    def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
+        """ There is a needed to implement method to train model for forecasting univariate time series """
         raise NotImplementedError()
 
     @abstractmethod
+    def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                            target_column: str, exogenous_columns: list, **kwargs):
+        """ There is a needed to implement method to train model for forecasting multivariate time series """
+        raise NotImplementedError()
+
     def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
         """ Generate predictions based on historical values for only one forecast horizon """
+        n_rows, n_cols = historical_values.shape
+
+        if n_cols > 2:
+            # Multivariate time series forecasting
+            target_column, exogenous_columns = find_target_and_exog_variables(historical_values)
+            return self.predict_multivariate_ts(historical_values, forecast_horizon,
+                                                target_column, exogenous_columns, **kwargs)
+        else:
+            # Univariate time series forecasting
+            return self.predict_univariate_ts(historical_values, forecast_horizon, **kwargs)
+
+    @abstractmethod
+    def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         raise NotImplementedError()
+
+    @abstractmethod
+    def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                                target_column: str, exogenous_columns: list, **kwargs):
+        """ Warning! In table target column will contain 'target' in column name """
+        raise NotImplementedError()
+
+
+def find_target_and_exog_variables(historical_values: pd.DataFrame):
+    """ Find names of columns for multivariate time series """
+    exogenous_columns = list(historical_values.columns)
+    target_column = list(filter(lambda x: 'target' in str(x), exogenous_columns))
+    target_column = str(target_column[0])
+    exogenous_columns.remove('datetime')
+    exogenous_columns.remove(target_column)
+    return target_column, exogenous_columns

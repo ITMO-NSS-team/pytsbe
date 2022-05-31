@@ -15,7 +15,8 @@ You will need to implement all the methods listed below.
 
 `**params` - parameters for model or library you want to set.
 
-### Method `fit`
+### Method `fit_univariate_ts`
+Fit model for univariate time series forecasting
 
 `historical_values` - historical data for model fitting. Example of expected table:
 
@@ -28,7 +29,7 @@ You will need to implement all the methods listed below.
 
 `**kwargs` - additional parameters.
 
-### Method `predict`
+### Method `predict_univariate_ts`
 The method should allow to make a prediction for the future on the basis of
 historical values. The forecast horizon will not differ from that during fit stage.
 
@@ -43,8 +44,43 @@ The method returns a special dataclass `ForecastResults`. Check the fields in th
 in addition to predictions as a numpy array, it is able to pass any additional information 
 you want to keep during the experiments (it can be handled in the serializer).
 
+### Method `fit_multivariate_ts`
+Fit model for multivariate time series forecasting
+
+`historical_values` - historical data for model fitting. Example of expected table:
+
+| datetime   | target\_ts\_1 | ts\_2 |
+| :--------: | :-----------: | :---: |
+| 01-01-2022 | 254           | 123   |
+| 02-01-2022 | 223           | 154   |
+
+where 'target_ts_1' is target column for forecasting and other columns are exogenous variables.
+
+`forecast_horizon` - number of elements to predict.
+
+`target_column` - name of target column to predict.
+
+`exogenous_columns` - name of additional columns which can be used as exogenous time series.
+
+`**kwargs` - additional parameters.
+
+### Method `predict_multivariate_ts`
+Perform forecasting with several time series. 
+
+`historical_values` - pandas Dataframe with historical values that is the last 
+known historical values at the time the forecast was generated.
+
+`forecast_horizon` - number of elements to predict.
+
+`target_column` - name of target column to predict.
+
+`exogenous_columns` - name of additional columns which can be used as exogenous time series.
+
+`**kwargs` - additional parameters.
+
 You should then think of a name for your model and 
 add to the dictionary in the [`Validator` class](../pytsbe/validation/validation.py).
+
 
 ## Implement Serializer (optional)
 Serializer is a class for saving the results of experiments.

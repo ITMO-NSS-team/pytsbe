@@ -26,10 +26,15 @@ class ETSForecaster(Forecaster):
         else:
             self.params = default_params
 
-    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
+    def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         pass
 
-    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
+    def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                            target_column: str, exogenous_columns: list, **kwargs):
+        pass
+
+    def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                              **kwargs) -> ForecastResults:
         # Get hyperparameters for current model
         alpha = self.params['smoothing_level']
         init_method = self.params['initialization_method']
@@ -40,3 +45,7 @@ class ETSForecaster(Forecaster):
 
         predicted_ts = self.model.forecast(forecast_horizon)
         return ForecastResults(predictions=predicted_ts)
+
+    def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                                target_column: str, exogenous_columns: list, **kwargs):
+        raise NotImplementedError('ETS does not support predict for multivariate time series forecasting')

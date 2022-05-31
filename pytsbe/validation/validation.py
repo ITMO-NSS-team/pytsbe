@@ -11,6 +11,7 @@ from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.ets_forecaster import ETSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
+from pytsbe.models.forecast import find_target_and_exog_variables
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.models.prophet_forecaster import ProphetForecaster
@@ -101,7 +102,7 @@ class Validator:
                                                      forecast_horizon=horizon,
                                                      future_indices=test_values['datetime'])
             # Update result with additional information
-            forecast_output.true_values = test_values
+            forecast_output.true_values = prepare_test_values_for_serialization(test_values)
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time, 'predict_seconds': self.timer.predict_time}
         else:
             # In-sample validation required
@@ -135,7 +136,7 @@ class Validator:
                                                      forecast_horizon=horizon,
                                                      future_indices=test_values['datetime'])
 
-            forecast_output.true_values = test_values
+            forecast_output.true_values = prepare_test_values_for_serialization(test_values)
             forecast_output.timeouts = {'fit_seconds': self.timer.fit_time,
                                         'predict_seconds': self.timer.predict_time}
             results.append(forecast_output)
@@ -174,3 +175,19 @@ def in_sample_splitting(time_series: pd.DataFrame, horizon: int, validation_bloc
         test_values = time_series.iloc[last_train_index: last_train_index + horizon, :]
 
         yield train_values, historical_values_for_test, test_values
+
+
+def prepare_test_values_for_serialization(test_values: pd.DataFrame):
+    """
+    Prepare dataframe with actual values.
+    Unify output for univariate and multivariate forecasting tasks
+    """
+    n_rows, n_cols = test_values.shape
+    if n_cols <= 2:
+        # Univariate time series forecasting
+        return test_values
+
+    # Multivariate processing
+    target_column, exogenous_columns = find_target_and_exog_variables(test_values)
+    test_values = test_values[['datetime', target_column]]
+    return test_values.rename(columns={target_column: 'value'})

@@ -43,7 +43,7 @@ class FedotForecaster(Forecaster):
             # Set new preset
             self.predefined_model = params['predefined_model']
 
-    def fit(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
+    def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Train FEDOT framework (launch AutoML algorithm) """
         train_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
 
@@ -55,12 +55,37 @@ class FedotForecaster(Forecaster):
         self.obtained_pipeline = self.model.fit(features=train_data,
                                                 predefined_model=self.predefined_model)
 
-    def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
+    def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                            target_column: str, exogenous_columns: list, **kwargs):
+        """ Create pipeline for multivariate time series forecasting """
+        # Find target column
+        train_data = {}
+        for exogenous_column in exogenous_columns:
+            train_data.update({str(exogenous_column): np.array(historical_values[exogenous_column])})
+
+        task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
+        self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
+                           timeout=self.timeout, preset=self.preset)
+        self.obtained_pipeline = self.model.fit(features=train_data,
+                                                target=np.array(historical_values[target_column]),
+                                                predefined_model=self.predefined_model)
+
+    def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Use obtained pipeline to make predictions """
         historical_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=True)
         forecast = self.model.predict(historical_data)
 
-        # Generate new dataframe
+        result = ForecastResults(predictions=forecast, obtained_model=self.obtained_pipeline,
+                                 additional_info={'fedot_api_object': self.model})
+        return result
+
+    def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
+                                target_column: str, exogenous_columns: list, **kwargs):
+        predict_input = {}
+        for exogenous_column in exogenous_columns:
+            predict_input.update({str(exogenous_column): np.array(historical_values[exogenous_column])})
+        forecast = self.model.predict(predict_input)
+
         result = ForecastResults(predictions=forecast, obtained_model=self.obtained_pipeline,
                                  additional_info={'fedot_api_object': self.model})
         return result
