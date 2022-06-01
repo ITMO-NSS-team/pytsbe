@@ -19,6 +19,7 @@ class FolderWalker:
         self.datasets = config_info['Datasets']
         self.launches = config_info['Launches']
         self.libraries = config_info['Libraries to compare']
+        self.clip_border = config_info['Clip border']
 
         self.forecast_files = {}
         self.timeout_files = {}
@@ -44,12 +45,46 @@ class FolderWalker:
         self.exclude_mismatched_results()
 
     def exclude_mismatched_results(self):
-        pass
+        """
+        In some cases it is not possible to get results for some cases (dataset -
+        launch number - library - time series - forecast horizon). So there is a
+        need to exclude cases without calculations
+        """
+        for dataset in self.datasets:
+            # First cycle - collect information
+            dataset_execution_time = []
+            dataset_forecast = []
+            for launch in range(self.launches):
+                for library in self.libraries:
+                    case_id = f'{dataset}|{launch}|{library}'
+
+                    ex_time_files = set(map(lambda x: os.path.basename(x), self.timeout_files[case_id]))
+                    forecast_files = set(map(lambda x: os.path.basename(x), self.forecast_files[case_id]))
+
+                    dataset_execution_time.append(ex_time_files)
+                    dataset_forecast.append(forecast_files)
+
+            # Find intersection for all cases
+            dataset_execution_time = set.intersection(*dataset_execution_time)
+            dataset_forecast = set.intersection(*dataset_forecast)
+
+            # Second cycle - update info
+            for launch in range(self.launches):
+                for library in self.libraries:
+                    case_id = f'{dataset}|{launch}|{library}'
+                    ex_time_file = self.timeout_files[case_id][0]
+                    current_path = os.path.dirname(ex_time_file)
+
+                    upd_time_paths = add_path_to_files(current_path, dataset_execution_time)
+                    upd_forecasts = add_path_to_files(current_path, dataset_forecast)
+                    self.timeout_files.update({case_id: upd_time_paths})
+                    self.forecast_files.update({case_id: upd_forecasts})
 
     @staticmethod
     def find_files(folder_with_files: str, search_pattern: str):
         """ Find all files in the folder and return full paths """
         files = os.listdir(folder_with_files)
+        files.sort()
         all_paths = []
         for file in files:
             if search_pattern in file:
@@ -61,6 +96,7 @@ class FolderWalker:
     def find_additional_files(folder_with_files: str):
         """ Search for unusual files in saved folder - additional info """
         files = os.listdir(folder_with_files)
+        files.sort()
         extra_paths = []
         for file in files:
             if 'timeouts.json' not in file and 'forecast_vs_actual.csv' not in file:
@@ -70,3 +106,13 @@ class FolderWalker:
             return None
 
         return extra_paths
+
+
+def add_path_to_files(current_path: str, files: set):
+    """ In set with file names for each file add folder path """
+    updated_data = []
+    for file in files:
+        updated_data.append(os.path.join(current_path, file))
+    updated_data.sort()
+
+    return updated_data

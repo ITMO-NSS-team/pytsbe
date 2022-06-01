@@ -94,6 +94,13 @@ class TimeSeriesDatasets:
 
         return TimeSeriesDatasets(time_series=datasets, labels=labels)
 
+    def get_time_series_by_label(self, ts_label: Union[str, int]) -> pd.DataFrame:
+        """ Return table with desired time series """
+        labels = np.array(self.labels, dtype=str)
+        time_series_id = np.ravel(np.argwhere(labels == str(ts_label)))[0]
+
+        return self.time_series[time_series_id]
+
 
 @dataclass
 class MultivariateTimeSeriesDatasets:

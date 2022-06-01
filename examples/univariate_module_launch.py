@@ -12,9 +12,8 @@ def launch_example():
     experimenter = TimeSeriesLauncher(working_dir='./example_launch',
                                       datasets=['FRED', 'SMART'],
                                       launches=2)
-    experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'repeat_last'],
+    experimenter.perform_experiment(libraries_to_compare=['pmdarima', 'repeat_last'],
                                     horizons=[10, 50],
-                                    libraries_params={'FEDOT': {'preset': 'ts', 'timeout': 2}},
                                     validation_blocks=2,
                                     clip_border=500)
 

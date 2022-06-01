@@ -110,7 +110,7 @@ and `<time series label>_<forecast horizon>_timeouts.json`. Additional objects c
 The `MetricsReport` class is used to generate summary tables. The module allows 
 to obtain common tables with metrics without any transformation, as well as performing aggregation.
 The generated tables can be used in your custom analysis external to this module. 
-Usage example: [`prepare_report.py`](../examples/prepare_report.py)
+Usage example: [`prepare_report.py`](../examples/univariate_prepare_report.py)
 
 Examples of generated tables: 
 
@@ -140,7 +140,7 @@ Examples of generated tables:
 ## Preparing report stage. Report visualisation
 
 The `Visualizer` class is used to generate simple visualizations. 
-Usage example: [`prepare_visualizations.py`](../examples/prepare_visualizations.py)
+Usage example: [`prepare_visualizations.py`](../examples/univariate_prepare_visualizations.py)
 
 Examples of generated plots:
 

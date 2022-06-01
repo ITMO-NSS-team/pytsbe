@@ -3,7 +3,7 @@ import json
 from itertools import product
 from typing import List, Optional
 
-from pytsbe.data.data import TimeSeriesDatasets, MultivariateTimeSeriesDatasets
+from pytsbe.constants import dataclass_by_name
 from pytsbe.store.save import Serialization
 from pytsbe.validation.validation import Validator
 
@@ -17,10 +17,6 @@ class TimeSeriesLauncher:
     :param datasets: list with names of datasets to perform validation
     :param launches: number of launches for each dataset
     """
-    dataclass_by_name = {'FRED': TimeSeriesDatasets,
-                         'TEP': TimeSeriesDatasets,
-                         'SMART': TimeSeriesDatasets,
-                         'SSH': MultivariateTimeSeriesDatasets}
 
     def __init__(self, working_dir: str, datasets: List[str], launches: int = 1):
         self.serializer = Serialization(working_dir)
@@ -45,6 +41,8 @@ class TimeSeriesLauncher:
         :param clip_border: number of elements to remain in time series if there
         is a need to clip time series (if None - there is no cropping)
         """
+        if libraries_params is None:
+            libraries_params = {}
         if os.path.exists(self.path_to_config_json):
             # Experiments hase been previously configured - check the relevance
             self.check_experiment_configuration(libraries_to_compare, horizons,
@@ -57,7 +55,7 @@ class TimeSeriesLauncher:
 
         for dataset_name in self.datasets:
             # Prepare data in pytsbe dataset form
-            dataset_processor = self.dataclass_by_name[dataset_name]
+            dataset_processor = dataclass_by_name[dataset_name]
             dataset = dataset_processor.configure_dataset_from_path(dataset_name=dataset_name,
                                                                     clip_border=clip_border)
 
