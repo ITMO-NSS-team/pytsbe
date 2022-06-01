@@ -116,25 +116,37 @@ Examples of generated tables:
 
 **Execution time** 
 
+```Python
+from pytsbe.report.report import MetricsReport
+
+metrics_processor = MetricsReport(working_dir='./example_launch')
+timeouts_table = metrics_processor.time_execution_table(aggregation=['Library', 'Dataset'])
+```
+
 | Library      | Dataset | Fit, seconds | Predict, seconds |
 | :----------: | :-----: | :----------: | :--------------: |
-| FEDOT        | FRED    | 0\.12        | 0\.01            |
-| FEDOT        | SMART   | 0\.12        | 0\.01            |
+| FEDOT        | FRED    | 23\.19       | 0\.11            |
+| FEDOT        | SMART   | 20\.03       | 0\.06            |
 | repeat\_last | FRED    | 0\.0         | 0\.0             |
 | repeat\_last | SMART   | 0\.0         | 0\.0             |
 
 **Metrics on validation sample**
 
-| Library      | Dataset | Horizon | MAE     | SMAPE |
-| :----------: | :-----: | :-----: | :-----: | :---: |
-| FEDOT        | FRED    | 10      | 2273\.4 | 7\.7  |
-| FEDOT        | FRED    | 50      | 6919\.0 | 17\.3 |
-| FEDOT        | SMART   | 10      | 0\.2    | 52\.6 |
-| FEDOT        | SMART   | 50      | 0\.4    | 75\.5 |
-| repeat\_last | FRED    | 10      | 2126\.1 | 10\.3 |
-| repeat\_last | FRED    | 50      | 2747\.1 | 10\.3 |
-| repeat\_last | SMART   | 10      | 0\.1    | 13\.1 |
-| repeat\_last | SMART   | 50      | 0\.2    | 32\.5 |
+```Python
+metrics_table = metrics_processor.metric_table(metrics=['MAE', 'SMAPE'],
+                                               aggregation=['Library', 'Dataset'])
+```
+
+| Library      | Dataset | Horizon | MAE       | SMAPE  |
+| :----------: | :-----: | :-----: | :-------: | :----: |
+| AutoTS       | FRED    | 10      | 0\.05     | 3\.61  |
+| AutoTS       | FRED    | 50      | 60817\.92 | 8\.69  |
+| AutoTS       | SMART   | 10      | 0\.04     | 27\.60 |
+| AutoTS       | SMART   | 50      | 0\.15     | 41\.66 |
+| repeat\_last | FRED    | 10      | 0\.02     | 1\.91  |
+| repeat\_last | FRED    | 50      | 14675\.70 | 3\.72  |
+| repeat\_last | SMART   | 10      | 0\.03     | 18\.30 |
+| repeat\_last | SMART   | 50      | 0\.13     | 37\.93 |
 
 
 ## Preparing report stage. Report visualisation
@@ -146,11 +158,39 @@ Examples of generated plots:
 
 **Execution time for fit method in seconds** 
 
+```Python
+from pytsbe.report.visualisation import Visualizer
+plots_creator = Visualizer(working_dir='./example_launch',
+                           folder_for_plots=None)
+
+plots_creator.execution_time_comparison()
+```
+
 <img src="./images/execution_time_fit_vis.png" width="850"/>
 
 **SMAPE metric on validation sample**
 
+```Python
+plots_creator.metrics_comparison(metrics=['MAE', 'SMAPE'])
+```
+
 <img src="./images/smape_vis.png" width="850"/>
+
+**Library forecast comparison**
+
+```Python 
+plots_creator.compare_forecasts()
+```
+
+<img src="./images/example_library_comparison.png" width="850"/>
+
+**Forecast for different launches comparison**
+
+```Python
+plots_creator.compare_launches(library='AutoTS')
+```
+
+<img src="./images/example_launches_comparison.png" width="850"/>
 
 ## Contributing
 

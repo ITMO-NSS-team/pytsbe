@@ -15,7 +15,7 @@ def prepare_plots():
     plots_creator.compare_forecasts()
 
     # Visualize one library but for different launches
-    plots_creator.compare_launches(library='pmdarima')
+    plots_creator.compare_launches(library='AutoTS')
 
 
 if __name__ == '__main__':

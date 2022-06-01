@@ -6,7 +6,11 @@ for forecasting univariate and multivariate time series.
 
 ## Description
 
-### Libraries
+### Univariate time series
+
+#### Libraries
+
+_Which can be used to predict univariate time series_
 
 The repository includes the following libraries and models for comparison:
 - [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports the time series forecasting task. Name in the repository `FEDOT`.
@@ -19,7 +23,7 @@ The repository includes the following libraries and models for comparison:
 - naive forecaster - forecasts the average value of the time series. Name in the repository `average`.
 - naive forecaster ETS - Simple exponential smoothing model. Name in the repository `ets`.
 
-### Univariate time series
+#### Datasets
 
 Available datasets (check data folder): 
 - [FRED](./data/fred.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting 
@@ -43,6 +47,17 @@ And visualisations:
 
 
 ### Multivariate time series 
+
+#### Libraries
+
+_Which can be used to predict multivariate time series_
+
+The repository includes the following libraries and models for comparison:
+- [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports both univariate and multivariate time
+ series forecasting tasks. Name in the repository `FEDOT`.
+
+
+#### Datasets
 
 At the moment, the repository contains one dataset of multivariate time series forecasting:
 - [SSH](./data/multivariate_ssh.csv) - Data were collected by simulating the sea surface height (SSH) using NEMO 

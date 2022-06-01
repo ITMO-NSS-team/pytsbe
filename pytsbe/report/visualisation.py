@@ -139,7 +139,7 @@ class Visualizer:
         plt.title(plot_title, fontsize=13)
         if self.folder_for_plots is not None:
             # Save plot into folder
-            name = f'Dataset {dataset_name}, Launch {launch_number}, {plot_title}.png'
+            name = f'Libraries - dataset {dataset_name}, Launch {launch_number}, {plot_title}.png'
             fig_name = os.path.join(self.folder_for_plots, name)
             plt.savefig(fig_name)
             plt.close()
@@ -176,7 +176,7 @@ class Visualizer:
         plt.title(plot_title, fontsize=13)
         if self.folder_for_plots is not None:
             # Save plot into folder
-            name = f'Dataset {dataset_name}, Library {library}, {plot_title}.png'
+            name = f'Launches - Dataset {dataset_name}, {plot_title}.png'
             fig_name = os.path.join(self.folder_for_plots, name)
             plt.savefig(fig_name)
             plt.close()
@@ -240,7 +240,7 @@ class Visualizer:
                 train_df = dataset.get_time_series_by_label(ts_label)
                 train_df['Launch number'] = ['source'] * len(train_df)
                 current_ts_df.append(train_df)
-                plot_title = f'Time series {ts_label}, Horizon {forecast_horizon}'
+                plot_title = f'Library {library}, Time series {ts_label}, Horizon {forecast_horizon}'
 
             current_ts_df.append(df)
 

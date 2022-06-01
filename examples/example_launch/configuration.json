@@ -1,0 +1,1 @@
+{"Datasets": ["FRED", "SMART"], "Launches": 2, "Libraries to compare": ["AutoTS", "repeat_last"], "Libraries parameters": {}, "Horizons": [10, 50], "Validation blocks": 2, "Clip border": 500}
