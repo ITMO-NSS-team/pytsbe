@@ -5,8 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from pytsbe.constants import dataclass_by_name
-from pytsbe.data.data import TimeSeriesDatasets, MultivariateTimeSeriesDatasets
+from pytsbe.data.data import TimeSeriesDatasets, MultivariateTimeSeriesDatasets, dataclass_by_name
 from pytsbe.report.preparers.utils import get_label_and_horizon
 from pytsbe.report.report import MetricsReport
 from pytsbe.store.utils import create_folder

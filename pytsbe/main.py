@@ -3,7 +3,7 @@ import json
 from itertools import product
 from typing import List, Optional
 
-from pytsbe.constants import dataclass_by_name
+from pytsbe.data.data import dataclass_by_name
 from pytsbe.store.save import Serialization
 from pytsbe.validation.validation import Validator
 

@@ -134,3 +134,17 @@ class MultivariateTimeSeriesDatasets:
         """ Return target time series and features (exogenous) """
         for ts_label in self.labels:
             yield self.dataframe.rename(columns={ts_label: f'target_{ts_label}'})
+
+    def get_time_series_by_label(self, ts_label: Union[str, int]) -> pd.DataFrame:
+        """ Return table with desired time series """
+        labels = np.array(self.labels, dtype=str)
+        time_series_id = np.ravel(np.argwhere(labels == str(ts_label)))[0]
+
+        target_df = self.dataframe[['datetime', self.labels[time_series_id]]]
+        return target_df.rename(columns={self.labels[time_series_id]: 'value'})
+
+
+dataclass_by_name = {'FRED': TimeSeriesDatasets,
+                     'TEP': TimeSeriesDatasets,
+                     'SMART': TimeSeriesDatasets,
+                     'SSH': MultivariateTimeSeriesDatasets}

@@ -7,7 +7,7 @@ def prepare_plots():
     Task: multivariate forecasting
     """
     plots_creator = Visualizer(working_dir='./example_multivariate_launch',
-                               folder_for_plots=None)
+                               folder_for_plots='plots')
     # The graphs show how long it takes to learn the models
     plots_creator.execution_time_comparison()
 
@@ -19,7 +19,6 @@ def prepare_plots():
 
     # Visualize one library but for different launches
     plots_creator.compare_launches(library='FEDOT')
-    # TODO fix AttributeError: 'MultivariateTimeSeriesDatasets' object has no attribute 'get_time_series_by_label'
 
 
 if __name__ == '__main__':
