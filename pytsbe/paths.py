@@ -17,7 +17,7 @@ def get_path_for_dataset(dataset_name: str):
                             'SMART': os.path.join(get_data_path(), 'smart.csv'),
                             'TEP': os.path.join(get_data_path(), 'tep.csv'),
                             'dummy': get_path_for_dummy_dataset(),
-                            'multivariate_dummy': get_path_for_multivariate_dummy_dataset(),
+                            'multivariate_dummy': get_path_for_dummy_dataset(),
                             'SSH': os.path.join(get_data_path(), 'multivariate_ssh.csv')}
     return path_by_dataset_name[dataset_name]
 
@@ -26,8 +26,3 @@ def get_path_for_dummy_dataset():
     """ This dataset is used only for testing """
     project_path = get_project_path()
     return os.path.join(project_path, 'test', 'data', 'dummy.csv')
-
-
-def get_path_for_multivariate_dummy_dataset():
-    project_path = get_project_path()
-    return os.path.join(project_path, 'test', 'data', 'multivariate_dummy.csv')
