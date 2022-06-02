@@ -134,7 +134,7 @@ timeouts_table = metrics_processor.time_execution_table(aggregation=['Library', 
 
 ```Python
 metrics_table = metrics_processor.metric_table(metrics=['MAE', 'SMAPE'],
-                                               aggregation=['Library', 'Dataset'])
+                                               aggregation=['Library', 'Dataset', 'Horizon'])
 ```
 
 | Library      | Dataset | Horizon | MAE       | SMAPE  |

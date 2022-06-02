@@ -139,7 +139,7 @@ class Visualizer:
         plt.title(plot_title, fontsize=13)
         if self.folder_for_plots is not None:
             # Save plot into folder
-            name = f'Libraries - dataset {dataset_name}, Launch {launch_number}, {plot_title}.png'
+            name = f'Libraries - Dataset {dataset_name}, Launch {launch_number}, {plot_title}.png'
             fig_name = os.path.join(self.folder_for_plots, name)
             plt.savefig(fig_name)
             plt.close()
