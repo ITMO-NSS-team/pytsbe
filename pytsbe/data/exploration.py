@@ -50,12 +50,12 @@ class DataExplorer:
             dataset_path = get_path_for_dataset(dataset_name)
             df = pd.read_csv(dataset_path, parse_dates=['datetime'])
 
-            series_in_the_dataset = list(df['series_id'].unique())
+            series_in_the_dataset = list(df['label'].unique())
             fig, axs = plt.subplots(len(series_in_the_dataset), sharex=True, sharey=False)
             fig.suptitle(f'Dataset {dataset_name}')
 
-            for i, series_id in enumerate(series_in_the_dataset):
-                df_series = df[df['series_id'] == series_id]
+            for i, label in enumerate(series_in_the_dataset):
+                df_series = df[df['label'] == label]
 
                 axs[i].plot(np.arange(len(df_series)), df_series['value'], c='red')
                 axs[i].axes.yaxis.set_visible(False)

@@ -7,7 +7,7 @@ def prepare_plots():
     Task: multivariate forecasting
     """
     plots_creator = Visualizer(working_dir='./example_multivariate_launch',
-                               folder_for_plots='plots')
+                               folder_for_plots=None)
     # The graphs show how long it takes to learn the models
     plots_creator.execution_time_comparison()
 

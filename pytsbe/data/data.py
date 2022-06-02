@@ -24,7 +24,8 @@ class TimeSeriesDatasets:
         """
         format_by_dataset_name = {'FRED': TimeSeriesDatasets.setup_from_long_format,
                                   'SMART': TimeSeriesDatasets.setup_from_long_format,
-                                  'TEP': TimeSeriesDatasets.setup_from_long_format}
+                                  'TEP': TimeSeriesDatasets.setup_from_long_format,
+                                  'dummy': TimeSeriesDatasets.setup_from_long_format}
 
         # Get appropriate method and path to dataset
         prepare_method = format_by_dataset_name.get(dataset_name)
@@ -33,26 +34,26 @@ class TimeSeriesDatasets:
         return val_set
 
     @staticmethod
-    def setup_from_long_format(path: str, series_id: str = 'series_id', clip_to: int = None):
+    def setup_from_long_format(path: str, label: str = 'label', clip_to: int = None):
         """ Load data from csv file with long format
 
         Structure can look like this
-        datetime | value | series_id
+        datetime | value | label
            ---   |  ---  |    0
            ---   |  ---  |    0
            ---   |  ---  |    1
 
         :param path: path to csv file
-        :param series_id: name of column with series labels
+        :param label: name of column with series labels
         :param clip_to: clip time series to desired length
         """
         df = pd.read_csv(path)
 
         datasets = []
         labels = []
-        for i in df[series_id].unique():
+        for i in df[label].unique():
             # Prepare pandas DataFrame for each time series
-            local_df = df[df[series_id] == i]
+            local_df = df[df[label] == i]
 
             # Clip time series if its necessary
             if clip_to is not None:
@@ -97,9 +98,9 @@ class TimeSeriesDatasets:
     def get_time_series_by_label(self, ts_label: Union[str, int]) -> pd.DataFrame:
         """ Return table with desired time series """
         labels = np.array(self.labels, dtype=str)
-        time_series_id = np.ravel(np.argwhere(labels == str(ts_label)))[0]
+        time_label = np.ravel(np.argwhere(labels == str(ts_label)))[0]
 
-        return self.time_series[time_series_id]
+        return self.time_series[time_label]
 
 
 @dataclass
@@ -137,14 +138,18 @@ class MultivariateTimeSeriesDatasets:
 
     def get_time_series_by_label(self, ts_label: Union[str, int]) -> pd.DataFrame:
         """ Return table with desired time series """
+        # To avoid a type mismatch (for example int - str)
         labels = np.array(self.labels, dtype=str)
-        time_series_id = np.ravel(np.argwhere(labels == str(ts_label)))[0]
+        time_label = np.ravel(np.argwhere(labels == str(ts_label)))[0]
+        true_label = self.labels[time_label]
 
-        target_df = self.dataframe[['datetime', self.labels[time_series_id]]]
-        return target_df.rename(columns={self.labels[time_series_id]: 'value'})
+        target_df = self.dataframe[['datetime', true_label]]
+        return target_df.rename(columns={true_label: 'value'})
 
 
 dataclass_by_name = {'FRED': TimeSeriesDatasets,
                      'TEP': TimeSeriesDatasets,
                      'SMART': TimeSeriesDatasets,
+                     'dummy': TimeSeriesDatasets,
+                     'multivariate_dummy': MultivariateTimeSeriesDatasets,
                      'SSH': MultivariateTimeSeriesDatasets}

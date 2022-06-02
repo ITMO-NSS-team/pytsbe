@@ -1,4 +1,4 @@
-datetime,value,series_id
+datetime,value,label
 1997-12-30 00:00:00,0,series_1
 1997-12-30 01:00:00,1,series_1
 1997-12-30 02:00:00,2,series_1
