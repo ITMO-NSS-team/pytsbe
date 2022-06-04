@@ -49,7 +49,7 @@ class AutoMLForecaster(Forecaster):
             self.obtained_pipeline = self._substitute_automl_training(train_data)
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                            target_column: str, exogenous_columns: list, **kwargs):
+                            target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('AutoML tools (TPOT and H2O) does not support fit '
                                   'for multivariate time series forecasting')
 
@@ -66,7 +66,7 @@ class AutoMLForecaster(Forecaster):
                                additional_info={'lagged_window_size': window_size})
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                                target_column: str, exogenous_columns: list, **kwargs):
+                                target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('AutoML tools (TPOT and H2O) does not support predict '
                                   'for multivariate time series forecasting')
 

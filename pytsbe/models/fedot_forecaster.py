@@ -56,12 +56,12 @@ class FedotForecaster(Forecaster):
                                                 predefined_model=self.predefined_model)
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                            target_column: str, exogenous_columns: list, **kwargs):
+                            target_column: str, predictors_columns: list, **kwargs):
         """ Create pipeline for multivariate time series forecasting """
         # Find target column
         train_data = {}
-        for exogenous_column in exogenous_columns:
-            train_data.update({str(exogenous_column): np.array(historical_values[exogenous_column])})
+        for predictor_column in predictors_columns:
+            train_data.update({str(predictor_column): np.array(historical_values[predictor_column])})
 
         task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
@@ -80,10 +80,10 @@ class FedotForecaster(Forecaster):
         return result
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                                target_column: str, exogenous_columns: list, **kwargs):
+                                target_column: str, predictors_columns: list, **kwargs):
         predict_input = {}
-        for exogenous_column in exogenous_columns:
-            predict_input.update({str(exogenous_column): np.array(historical_values[exogenous_column])})
+        for predictor_column in predictors_columns:
+            predict_input.update({str(predictor_column): np.array(historical_values[predictor_column])})
         forecast = self.model.predict(predict_input)
 
         result = ForecastResults(predictions=forecast, obtained_model=self.obtained_pipeline,

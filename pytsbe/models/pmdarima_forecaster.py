@@ -42,7 +42,7 @@ class ARIMAForecaster(Forecaster):
                                    maxiter=self.params['maxiter'])
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                            target_column: str, exogenous_columns: list, **kwargs):
+                            target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('pmdarima does not support fit for multivariate time series forecasting')
 
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
@@ -55,5 +55,5 @@ class ARIMAForecaster(Forecaster):
         return ForecastResults(predictions=predicted_ts)
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                                target_column: str, exogenous_columns: list, **kwargs):
+                                target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('pmdarima does not support predict for multivariate time series forecasting')

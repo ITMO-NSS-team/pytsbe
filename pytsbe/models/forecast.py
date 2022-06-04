@@ -27,9 +27,9 @@ class Forecaster:
 
         if n_cols > 2:
             # Multivariate time series forecasting
-            target_column, exogenous_columns = find_target_and_exog_variables(historical_values)
+            target_column, predictors_columns = find_target_and_exog_variables(historical_values)
             return self.fit_multivariate_ts(historical_values, forecast_horizon,
-                                            target_column, exogenous_columns, **kwargs)
+                                            target_column, predictors_columns, **kwargs)
         else:
             # Univariate time series forecasting
             return self.fit_univariate_ts(historical_values, forecast_horizon, **kwargs)
@@ -41,7 +41,7 @@ class Forecaster:
 
     @abstractmethod
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                            target_column: str, exogenous_columns: list, **kwargs):
+                            target_column: str, predictors_columns: list, **kwargs):
         """ There is a needed to implement method to train model for forecasting multivariate time series """
         raise NotImplementedError()
 
@@ -51,9 +51,9 @@ class Forecaster:
 
         if n_cols > 2:
             # Multivariate time series forecasting
-            target_column, exogenous_columns = find_target_and_exog_variables(historical_values)
+            target_column, predictors_columns = find_target_and_exog_variables(historical_values)
             return self.predict_multivariate_ts(historical_values, forecast_horizon,
-                                                target_column, exogenous_columns, **kwargs)
+                                                target_column, predictors_columns, **kwargs)
         else:
             # Univariate time series forecasting
             return self.predict_univariate_ts(historical_values, forecast_horizon, **kwargs)
@@ -64,16 +64,15 @@ class Forecaster:
 
     @abstractmethod
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                                target_column: str, exogenous_columns: list, **kwargs):
+                                target_column: str, predictors_columns: list, **kwargs):
         """ Warning! In table target column will contain 'target' in column name """
         raise NotImplementedError()
 
 
 def find_target_and_exog_variables(historical_values: pd.DataFrame):
     """ Find names of columns for multivariate time series """
-    exogenous_columns = list(historical_values.columns)
-    target_column = list(filter(lambda x: 'target' in str(x), exogenous_columns))
+    target_plus_exogenous_columns = list(historical_values.columns)
+    target_column = list(filter(lambda x: 'target' in str(x), target_plus_exogenous_columns))
     target_column = str(target_column[0])
-    exogenous_columns.remove('datetime')
-    exogenous_columns.remove(target_column)
-    return target_column, exogenous_columns
+    target_plus_exogenous_columns.remove('datetime')
+    return target_column, target_plus_exogenous_columns

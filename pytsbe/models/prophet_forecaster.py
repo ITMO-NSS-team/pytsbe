@@ -33,7 +33,7 @@ class ProphetForecaster(Forecaster):
         self.model.fit(historical_values)
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                            target_column: str, exogenous_columns: list, **kwargs):
+                            target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('Prophet does not support fit for multivariate time series forecasting')
 
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
@@ -46,5 +46,5 @@ class ProphetForecaster(Forecaster):
         return ForecastResults(predictions=np.array(forecast_df['yhat']))
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
-                                target_column: str, exogenous_columns: list, **kwargs):
+                                target_column: str, predictors_columns: list, **kwargs):
         raise NotImplementedError('Prophet does not support predict for multivariate time series forecasting')
