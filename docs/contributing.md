@@ -60,7 +60,7 @@ where 'target_ts_1' is target column for forecasting and other columns are exoge
 
 `target_column` - name of target column to predict.
 
-`exogenous_columns` - name of additional columns which can be used as exogenous time series.
+`predictors_columns` - name of additional columns which can be used as exogenous time series and target series.
 
 `**kwargs` - additional parameters.
 
@@ -74,7 +74,7 @@ known historical values at the time the forecast was generated.
 
 `target_column` - name of target column to predict.
 
-`exogenous_columns` - name of additional columns which can be used as exogenous time series.
+`predictors_columns` - name of additional columns which can be used as exogenous time series and target series.
 
 `**kwargs` - additional parameters.
 
