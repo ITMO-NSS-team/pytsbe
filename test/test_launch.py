@@ -5,13 +5,14 @@ import os
 import pandas as pd
 
 from pytsbe.paths import get_test_path
+from pytsbe.report.visualisation import Visualizer
 from test.test_report import get_results_for_testing
 from pytsbe.main import TimeSeriesLauncher
 
 
 @pytest.fixture(scope='session', autouse=True)
 def delete_files_after_tests(request):
-    paths = ['test_launch']
+    paths = ['test_launch', 'test_multivariate_launch', 'path_for_plots']
     delete_files = create_func_delete_files(paths)
     delete_files()
     request.addfinalizer(delete_files)
@@ -65,3 +66,30 @@ def test_univariate_algorithm_launch():
     assert len(os.listdir(expected_library_path)) == 48
     # Full validation length = forecast length * number of validation blocks
     assert len(forecast_dataframe) == 10
+
+
+def test_multivariate_algorithm_launch():
+    """ Launch multivariate time series forecasting with naive forecaster """
+    path_with_results = os.path.join(get_test_path(), 'test_multivariate_launch')
+    experimenter = TimeSeriesLauncher(working_dir=path_with_results,
+                                      datasets=['SSH'], launches=1)
+    experimenter.perform_experiment(libraries_to_compare=['average'], horizons=[10],
+                                    validation_blocks=2, clip_border=400)
+
+    expected_dataset_path = os.path.join(path_with_results, 'SSH')
+    expected_library_path = os.path.join(expected_dataset_path, 'launch_0', 'average')
+    forecast_dataframe = pd.read_csv(os.path.join(expected_library_path, '0_10_forecast_vs_actual.csv'))
+
+    assert os.path.isdir(expected_dataset_path)
+    assert len(os.listdir(expected_library_path)) == 50
+    assert len(forecast_dataframe) == 20
+
+
+def test_report_execution_time_plots():
+    """ Check if folder with plots create correctly. Also check number of plots """
+    folder_for_plots = os.path.join(get_test_path(), 'path_for_plots')
+    plots_creator = Visualizer(working_dir=get_results_for_testing(),
+                               folder_for_plots=folder_for_plots)
+    plots_creator.execution_time_comparison()
+
+    assert len(os.listdir(folder_for_plots)) == 2
