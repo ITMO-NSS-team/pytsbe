@@ -12,6 +12,11 @@ def get_data_path() -> str:
     return os.path.join(project_path, 'data')
 
 
+def get_test_path() -> str:
+    """ Path to directory with tests """
+    return os.path.join(get_project_path(), 'test')
+
+
 def get_path_for_dataset(dataset_name: str):
     path_by_dataset_name = {'FRED': os.path.join(get_data_path(), 'fred.csv'),
                             'SMART': os.path.join(get_data_path(), 'smart.csv'),
@@ -24,5 +29,4 @@ def get_path_for_dataset(dataset_name: str):
 
 def get_path_for_dummy_dataset():
     """ This dataset is used only for testing """
-    project_path = get_project_path()
-    return os.path.join(project_path, 'test', 'data', 'dummy.csv')
+    return os.path.join(get_test_path(), 'data', 'dummy.csv')

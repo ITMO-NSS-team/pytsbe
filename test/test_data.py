@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 from pytsbe.data.data import TimeSeriesDatasets, MultivariateTimeSeriesDatasets, dataclass_by_name
 from pytsbe.paths import get_path_for_dummy_dataset
@@ -88,3 +89,23 @@ def test_train_test_split_multivariate_ts():
         assert correct_target_cols[i] in list(train_values.columns)
         assert len(train_values) == 90
         assert test_values[correct_target_cols[i]].iloc[0] == correct_first_test_elements[i]
+
+
+def test_in_sample_train_test_split_multivariate_ts():
+    """ Check correctness of time series in-sample validation splitting for multivariate case """
+    forecast_horizon = 10
+    validation_blocks = 2
+
+    correct_train_lens = [80, 90]
+    first_time_in_test = [datetime.strptime('Jan 2 1998  8:00AM', '%b %d %Y %I:%M%p'),
+                          datetime.strptime('Jan 2 1998  6:00PM', '%b %d %Y %I:%M%p')]
+    dummy_dataset = get_dummy_dataset('multivariate_dummy')
+    for ts in dummy_dataset.time_series:
+        i = 0
+        for train_values, historical_values_for_test, test_values in in_sample_splitting(ts,
+                                                                                         forecast_horizon,
+                                                                                         validation_blocks):
+            # Perform checking
+            assert correct_train_lens[i] == len(train_values) == len(historical_values_for_test)
+            assert first_time_in_test[i] == test_values['datetime'].iloc[0]
+            i += 1
