@@ -43,6 +43,10 @@ class FedotForecaster(Forecaster):
             # Set new preset
             self.predefined_model = params['predefined_model']
 
+        self.n_jobs = 1
+        if 'n_jobs' in params:
+            self.n_jobs = params['n_jobs']
+
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Train FEDOT framework (launch AutoML algorithm) """
         train_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
@@ -50,7 +54,7 @@ class FedotForecaster(Forecaster):
         # Initialize model
         task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
-                           timeout=self.timeout, preset=self.preset)
+                           timeout=self.timeout, preset=self.preset, n_jobs=self.n_jobs)
 
         self.obtained_pipeline = self.model.fit(features=train_data,
                                                 predefined_model=self.predefined_model)
@@ -65,7 +69,7 @@ class FedotForecaster(Forecaster):
 
         task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
-                           timeout=self.timeout, preset=self.preset)
+                           timeout=self.timeout, preset=self.preset, n_jobs=self.n_jobs)
         self.obtained_pipeline = self.model.fit(features=train_data,
                                                 target=np.array(historical_values[target_column]),
                                                 predefined_model=self.predefined_model)
