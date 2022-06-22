@@ -85,6 +85,14 @@ According to our [experiments](./experiments).
 
 In progress
 
+
+## Install
+Use the following command to install this module
+
+```
+pip install git+https://github.com/ITMO-NSS-team/pytsbe.git
+```
+
 ## Contributing 
 This module is designed so that you can add your library to it as easily as possible. 
 

@@ -1,0 +1,26 @@
+FEDOT: {
+    'timeout': 10
+}
+
+AutoTS: {
+    'frequency': 'infer',
+    'prediction_interval': 0.9,
+    'ensemble': 'all',
+    'max_generations': 30,
+    'num_validations': 3,
+    'validation_method': 'backwards'
+}
+
+H2O: {
+    'timeout': 10
+}
+
+TPOT: {
+    'timeout': 10
+}
+
+pmdarima:
+prophet:
+repeat_last:
+average:
+ets:
