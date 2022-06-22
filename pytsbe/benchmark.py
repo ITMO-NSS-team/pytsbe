@@ -5,11 +5,8 @@ from pytsbe.main import TimeSeriesLauncher
 from pytsbe.report.report import MetricsReport
 
 
-class BenchmarkUnivariate:
-    """
-    Class for benchmarking different time series forecasting algorithms on
-    univariate time series
-    """
+class Benchmark:
+    """ Base class for benchmarking """
 
     def __init__(self, working_dir: str, config_path: str = None):
         if config_path is None:
@@ -26,6 +23,7 @@ class BenchmarkUnivariate:
         self.experimenter = TimeSeriesLauncher(working_dir=working_dir,
                                                datasets=self.configuration['datasets'],
                                                launches=self.configuration['launches'])
+        self.default_file_name = 'benchmark_metrics.csv'
 
     def run(self, file_name: str = None):
         """ Start experiment with desired configuration
@@ -54,6 +52,28 @@ class BenchmarkUnivariate:
         print(final_metrics)
 
         if file_name is None:
-            file_name = 'univariate_benchmark_metrics.csv'
+            file_name = self.default_file_name
         final_metrics.to_csv(file_name, index=False)
         return final_metrics
+
+
+class BenchmarkUnivariate(Benchmark):
+    """
+    Class for benchmarking different time series forecasting algorithms on
+    univariate time series
+    """
+
+    def __init__(self, working_dir: str, config_path: str = None):
+        super().__init__(working_dir, config_path)
+        self.default_file_name = 'univariate_benchmark_metrics.csv'
+
+
+class BenchmarkMultivariate(Benchmark):
+    """
+    Class for benchmarking different time series forecasting algorithms on
+    multivariate time series
+    """
+
+    def __init__(self, working_dir: str, config_path: str = None):
+        super().__init__(working_dir, config_path)
+        self.default_file_name = 'multivariate_benchmark_metrics.csv'

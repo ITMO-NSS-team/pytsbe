@@ -1,9 +1,9 @@
-from pytsbe.bencmark import BenchmarkUnivariate
+from pytsbe.benchmark import BenchmarkMultivariate
 
 
 def start_benchmark():
     """ Launch benchmark with desired configuration """
-    pytsbe = BenchmarkUnivariate(working_dir='./benchmark')
+    pytsbe = BenchmarkMultivariate(working_dir='./benchmark_results')
     pytsbe.run()
 
 
