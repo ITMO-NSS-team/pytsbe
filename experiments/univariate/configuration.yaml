@@ -1,26 +1,22 @@
-FEDOT: {
-    'timeout': 10
+libraries: {FEDOT: {'timeout': 10},
+            AutoTS: {'frequency': 'infer',
+                     'prediction_interval': 0.9,
+                     'ensemble': 'all',
+                     'max_generations': 30,
+                     'num_validations': 3,
+                     'validation_method': 'backwards'},
+            H2O: {'timeout': 10},
+            TPOT: {'timeout': 10},
+            pmdarima:,
+            prophet:,
+            repeat_last:,
+            average:,
+            ets:
 }
 
-AutoTS: {
-    'frequency': 'infer',
-    'prediction_interval': 0.9,
-    'ensemble': 'all',
-    'max_generations': 30,
-    'num_validations': 3,
-    'validation_method': 'backwards'
-}
-
-H2O: {
-    'timeout': 10
-}
-
-TPOT: {
-    'timeout': 10
-}
-
-pmdarima:
-prophet:
-repeat_last:
-average:
-ets:
+# Additional parameters
+datasets: ['FRED', 'SMART', 'TEP']
+launches: 5
+clip_border: 2000
+validation_blocks: 3
+horizons: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]

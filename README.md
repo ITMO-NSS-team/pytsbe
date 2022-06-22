@@ -79,12 +79,25 @@ The model is designed to iteratively generate a forecast for each time series in
 
 See [documentation](./docs) for a more detailed explanation. 
 
-## Results table
+## Benchmark
 
-According to our [experiments](./experiments).
+Check [experiments](./experiments) folder.
+
+We prepared a benchmark for two forecasting tasks: 
+- univariate time series 
+- multivariate time series
+
+For each case there is a folder with a configuration file to launch experiments. 
+Results according to experiments are presented in the tables below. 
+
+
+### Univariate time series 
 
 In progress
 
+### Multivariate time series 
+
+In progress
 
 ## Install
 Use the following command to install this module
