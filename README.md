@@ -55,7 +55,8 @@ _Which can be used to predict multivariate time series_
 The repository includes the following libraries and models for comparison:
 - [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports both univariate and multivariate time
  series forecasting tasks. Name in the repository `FEDOT`.
-
+- naive forecaster - repeat last observation. Name in the repository `repeat_last`.
+- naive forecaster - forecasts the average value of the time series. Name in the repository `average`.
 
 #### Datasets
 
@@ -79,12 +80,24 @@ The model is designed to iteratively generate a forecast for each time series in
 
 See [documentation](./docs) for a more detailed explanation. 
 
-## Results table
+## Benchmark
 
-According to our [experiments](./experiments).
+Check [experiments](./experiments) folder
+
+Benchmark contains two forecasting tasks: 
+- univariate time series
+- multivariate time series
+
+For each case there is a folder with a configuration file to launch experiments. 
+Results according to experiments are presented in the tables below. 
+
+### Univariate time series 
 
 In progress
 
+### Multivariate time series 
+
+In progress
 
 ## Install
 Use the following command to install this module

@@ -34,4 +34,9 @@ class NaiveRepeatLastValueForecaster(Forecaster):
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
                                 target_column: str, predictors_columns: list, **kwargs):
-        raise NotImplementedError('Naive forecaster does not support predict for multivariate time series forecasting')
+        """ Predict for multivariate time series the same as for univariate due to it's naive forecaster """
+        time_series = np.array(historical_values[target_column])
+        self.last_observation = time_series[-1]
+
+        predicted_ts = np.full(forecast_horizon, self.last_observation)
+        return ForecastResults(predictions=predicted_ts)
