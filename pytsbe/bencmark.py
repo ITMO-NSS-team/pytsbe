@@ -55,7 +55,7 @@ class BenchmarkUnivariate:
 
         # Aggregated metrics
         final_metrics = metrics_table.merge(timeouts_table, on='Library')
-        print(f'Final metrics:')
+        print('Final metrics:')
         print(final_metrics)
 
         if file_name is None:

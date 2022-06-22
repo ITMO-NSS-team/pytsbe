@@ -1,6 +1,5 @@
 FEDOT: {
-    'timeout': 10,
-    'n_jobs': -1
+    'timeout': 10
 }
 
 AutoTS: {

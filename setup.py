@@ -19,7 +19,7 @@ def get_requirements():
 setuptools.setup(
     name="pytsbe",
     version="0.1",
-    author="NSS Team",
+    author="NSS Lab",
     description="Python time series forecasting benchmark tool",
     keywords='time series, forecasting, benchmark',
     long_description_content_type="text/markdown",
