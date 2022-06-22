@@ -24,7 +24,7 @@ setuptools.setup(
     keywords='time series, forecasting, benchmark',
     long_description_content_type="text/markdown",
     url="https://github.com/ITMO-NSS-team/pytsbe",
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=get_requirements(),
     packages=setuptools.find_packages(),
     classifiers=[
