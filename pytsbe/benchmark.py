@@ -27,13 +27,12 @@ class Benchmark:
                                                launches=self.configuration['launches'])
         self.default_file_name = 'benchmark_metrics.csv'
 
-    def run(self, file_name: str = None, new_libraries: bool = False):
+    def run(self, file_name: str = None):
         """ Start experiment with desired configuration
 
         :param file_name: name of csv file to save aggregated final metrics
-        :param new_libraries: is new libraries were added into configuration file
         """
-        if new_libraries:
+        if self.is_new_libraries_added():
             self.add_libraries_to_configuration()
 
         libraries_params = self.configuration['libraries']
@@ -61,6 +60,21 @@ class Benchmark:
             file_name = self.default_file_name
         final_metrics.to_csv(file_name, index=False)
         return final_metrics
+
+    def is_new_libraries_added(self):
+        """ Check if new libraries were added into configuration file """
+        if os.path.isfile(self.experimenter.path_to_config_json) is False:
+            # It is first launch
+            return False
+
+        with open(self.experimenter.path_to_config_json) as file:
+            config_info = json.load(file)
+
+        old_libraries = set(config_info['Libraries to compare'])
+        new_libraries = set(self.configuration['libraries'].keys())
+        difference = new_libraries - old_libraries
+
+        return len(difference) > 0
 
     def add_libraries_to_configuration(self):
         """ Add new libraries to configuration json file """
