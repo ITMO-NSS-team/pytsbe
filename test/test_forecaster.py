@@ -58,4 +58,3 @@ def test_multivariate_models(forecaster: Callable, forecaster_params: dict):
 
     assert isinstance(predict, ForecastResults)
     assert len(predict.predictions) == forecast_horizon
-
