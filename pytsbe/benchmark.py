@@ -62,7 +62,12 @@ class Benchmark:
         return final_metrics
 
     def is_new_libraries_added(self):
-        """ Check if new libraries were added into configuration file """
+        """
+        Check if new libraries were added into configuration file.
+        This happens when the benchmark has been run previously on some set of
+        libraries (algorithms). But over time, new libraries have been added
+        and need to be tested.
+        """
         if os.path.isfile(self.experimenter.path_to_config_json) is False:
             # It is first launch
             return False
