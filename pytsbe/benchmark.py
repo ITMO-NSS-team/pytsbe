@@ -1,5 +1,7 @@
+import json
 import os
 import yaml
+from typing import List
 
 from pytsbe.main import TimeSeriesLauncher
 from pytsbe.report.report import MetricsReport
@@ -30,6 +32,9 @@ class Benchmark:
 
         :param file_name: name of csv file to save aggregated final metrics
         """
+        if self.is_new_libraries_added():
+            self.add_libraries_to_configuration()
+
         libraries_params = self.configuration['libraries']
         libraries_to_compare = list(libraries_params.keys())
         libraries_to_compare.sort()
@@ -55,6 +60,46 @@ class Benchmark:
             file_name = self.default_file_name
         final_metrics.to_csv(file_name, index=False)
         return final_metrics
+
+    def is_new_libraries_added(self):
+        """
+        Check if new libraries were added into configuration file.
+        This happens when the benchmark has been run previously on some set of
+        libraries (algorithms). But over time, new libraries have been added
+        and need to be tested.
+        """
+        if os.path.isfile(self.experimenter.path_to_config_json) is False:
+            # It is first launch
+            return False
+
+        with open(self.experimenter.path_to_config_json) as file:
+            config_info = json.load(file)
+
+        old_libraries = set(config_info['Libraries to compare'])
+        new_libraries = set(self.configuration['libraries'].keys())
+        difference = new_libraries - old_libraries
+
+        return len(difference) > 0
+
+    def add_libraries_to_configuration(self):
+        """ Add new libraries to configuration json file """
+        with open(self.experimenter.path_to_config_json) as file:
+            config_info = json.load(file)
+
+        libraries = config_info['Libraries to compare']
+        current_libraries = list(self.configuration['libraries'].keys())
+        new_libraries = list(set(current_libraries) - set(libraries))
+        print(f'The following libraries were added: {new_libraries}')
+
+        # Update configuration file
+        config_info['Libraries to compare'] = current_libraries
+        libraries_params = config_info['Libraries parameters']
+        for new_library in new_libraries:
+            new_lib_parameters = self.configuration['libraries'][new_library]
+            libraries_params.update({new_library: new_lib_parameters})
+
+        with open(self.experimenter.path_to_config_json, 'w') as file:
+            json.dump(config_info, file)
 
 
 class BenchmarkUnivariate(Benchmark):
