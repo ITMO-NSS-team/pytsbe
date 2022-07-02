@@ -1,0 +1,22 @@
+libraries: {FEDOT: {'timeout': 10},
+            AutoTS: {'frequency': 'infer',
+                     'prediction_interval': 0.9,
+                     'ensemble': 'superfast',
+                     'max_generations': 10,
+                     'num_validations': 1,
+                     'validation_method': 'backwards'},
+            H2O: {'timeout': 10},
+            TPOT: {'timeout': 10},
+            pmdarima:,
+            prophet:,
+            repeat_last:,
+            average:,
+            ets:
+}
+
+# Additional parameters
+datasets: ['FRED', 'SMART', 'TEP']
+launches: 2
+clip_border: 2000
+validation_blocks: 3
+horizons: [50]
