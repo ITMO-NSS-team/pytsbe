@@ -5,6 +5,7 @@ from typing import Optional, List, Union
 from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.exception import ExceptionHandler
+from pytsbe.models.automl_forecasters.lama_forecaster import LAMAForecaster
 from pytsbe.models.automl_forecasters.tpot_forecaster import TPOTForecaster
 from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.average_forecaster import NaiveAverageForecaster
@@ -29,6 +30,7 @@ class Validator:
     Important: responsible for time series (from datasets) and horizons cycles
     """
     forecaster_by_name = {'FEDOT': FedotForecaster,
+                          'LAMA': LAMAForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
                           'prophet': ProphetForecaster,
