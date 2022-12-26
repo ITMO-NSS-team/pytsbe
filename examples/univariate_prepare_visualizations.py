@@ -3,7 +3,7 @@ from pytsbe.report.visualisation import Visualizer
 
 def prepare_plots():
     """ Demonstration of how to use Visualizer to display plots """
-    plots_creator = Visualizer(working_dir=r'D:\Programming\Work\pytsbe\experiments\univariate\benchmark_results',
+    plots_creator = Visualizer(working_dir=r'./example_launch',
                                folder_for_plots=None)
     # The graphs show how long it takes to learn the models
     #plots_creator.execution_time_comparison()
