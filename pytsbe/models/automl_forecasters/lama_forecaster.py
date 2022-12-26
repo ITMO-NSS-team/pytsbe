@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 try:
     from lightautoml.tasks import Task as LAMAtask
@@ -7,11 +7,11 @@ try:
 except ImportError:
     print('Does not found LAMA library. Continue...')
 
-
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
 
 import logging
+
 logging.raiseExceptions = False
 
 
@@ -26,18 +26,17 @@ class LAMAForecaster(Forecaster):
         self.target = 'value'
         self.task = LAMAtask('multi:reg', greater_is_better=False, metric="mae", loss="mae")
         self.model = None
+
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         historical_values['datetime'] = pd.to_datetime(historical_values['datetime'])
         train = historical_values.reset_index()[['datetime', 'value']]
-        TARGET = 'value'
+
         seq_params = {"seq0": {"case": "next_values",
                                "params": {"n_target": forecast_horizon,
                                           "history": np.maximum(7, forecast_horizon),
                                           "step": 1, "from_last": True, "test_last": True}}}
-
-        task = LAMAtask('multi:reg', greater_is_better=False, metric="mae", loss="mae")
-        roles = {"target": TARGET}
-        self.model = AutoTS(task, seq_params=seq_params, trend_params={"trend": True})
+        roles = {"target": self.target}
+        self.model = AutoTS(self.task, seq_params=seq_params, trend_params={"trend": True})
         train_pred, _ = self.model.fit_predict(train, roles)
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
