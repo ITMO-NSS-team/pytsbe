@@ -3,8 +3,8 @@ from pytsbe.report.visualisation import Visualizer
 
 def prepare_plots():
     """ Demonstration of how to use Visualizer to display plots """
-    plots_creator = Visualizer(working_dir='./example_launch',
-                               folder_for_plots=None)
+    plots_creator = Visualizer(working_dir=r'Z:\pytsbe\5_launches_10_minutes',
+                               folder_for_plots='./')
     # The graphs show how long it takes to learn the models
     plots_creator.execution_time_comparison()
 

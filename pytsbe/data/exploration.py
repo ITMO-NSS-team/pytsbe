@@ -18,7 +18,12 @@ class DataExplorer:
 
     def __init__(self, directory: str = None):
         if directory is None:
-            self.dataset_names = ['FRED', 'TEP', 'SMART']
+            self.dataset_names = ['FRED', 'TEP', 'SMART', 'M4_hourly',
+                                  'M4_daily',
+                                  'M4_monthly',
+                                  'M4_quarterly',
+                                  'M4_weekly',
+                                  'M4_yearly']
         else:
             files = os.listdir(os.path.abspath(directory))
             self.dataset_names = list(map(lambda x: x.split('.csv')[0], files))
@@ -36,9 +41,9 @@ class DataExplorer:
             non_stationary_ratio = self.calculate_percentage_of_non_stationary_series(dataset)
             info.append([dataset_name, number_of_time_series, min_len, mean_len, max_len, non_stationary_ratio])
 
-        info = pd.DataFrame(info, columns=['Dataset', 'Total number of time series', 'Minimal row length',
-                                           'Average row length',
-                                           'Maximal row length', 'Percentage of non-stationary time series'])
+        info = pd.DataFrame(info, columns=['Dataset', 'Total number of time series',
+                                           'Minimal row length', 'Average row length', 'Maximal row length',
+                                           'Percentage of non-stationary time series'])
         pd.set_option('display.max_columns', None)
         print(info)
 

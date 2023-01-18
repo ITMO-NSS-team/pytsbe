@@ -21,6 +21,12 @@ def get_path_for_dataset(dataset_name: str):
     path_by_dataset_name = {'FRED': os.path.join(get_data_path(), 'fred.csv'),
                             'SMART': os.path.join(get_data_path(), 'smart.csv'),
                             'TEP': os.path.join(get_data_path(), 'tep.csv'),
+                            'M4_hourly': os.path.join(get_data_path(), 'M4Hourly.csv'),
+                            'M4_daily': os.path.join(get_data_path(), 'M4Daily.csv'),
+                            'M4_monthly': os.path.join(get_data_path(), 'M4Monthly.csv'),
+                            'M4_quarterly': os.path.join(get_data_path(), 'M4Quarterly.csv'),
+                            'M4_weekly': os.path.join(get_data_path(), 'M4Weekly.csv'),
+                            'M4_yearly': os.path.join(get_data_path(), 'M4Yearly.csv'),
                             'dummy': get_path_for_dummy_dataset(),
                             'multivariate_dummy': get_path_for_dummy_dataset(),
                             'SSH': os.path.join(get_data_path(), 'multivariate_ssh.csv')}
