@@ -1,15 +1,17 @@
 import pandas as pd
 import numpy as np
 
+
 try:
     from fedot.api.main import Fedot
     from fedot.core.data.data import InputData
-    from fedot.core.repository.tasks import Task, TaskTypesEnum, TsForecastingParams
-    from fedot.core.repository.dataset_types import DataTypesEnum
     from fedot.core.pipelines.node import PrimaryNode, SecondaryNode
     from fedot.core.pipelines.pipeline import Pipeline
+    from fedot.core.repository.dataset_types import DataTypesEnum
+    from fedot.core.repository.tasks import TsForecastingParams, TaskTypesEnum, Task
 except ImportError:
     print('Does not found FEDOT library. Continue...')
+
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
@@ -69,7 +71,7 @@ class FedotForecaster(Forecaster):
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Use obtained pipeline to make predictions """
         historical_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=True)
-        forecast = self.model.predict(historical_data)
+        forecast = self.model.forecast(historical_data)
 
         result = ForecastResults(predictions=forecast, obtained_model=self.obtained_pipeline,
                                  additional_info={'fedot_api_object': self.model})
@@ -80,7 +82,7 @@ class FedotForecaster(Forecaster):
         predict_input = {}
         for predictor_column in predictors_columns:
             predict_input.update({str(predictor_column): np.array(historical_values[predictor_column])})
-        forecast = self.model.predict(predict_input)
+        forecast = self.model.forecast(predict_input)
 
         result = ForecastResults(predictions=forecast, obtained_model=self.obtained_pipeline,
                                  additional_info={'fedot_api_object': self.model})

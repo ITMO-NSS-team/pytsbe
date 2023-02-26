@@ -13,7 +13,7 @@ def prepare_tables_with_metric():
     print(timeouts_table)
 
     # Calculate and display information about metrics during validation
-    metrics_table = metrics_processor.metric_table(metrics=['MAE', 'SMAPE'],
+    metrics_table = metrics_processor.metric_table(metrics=['SMAPE'],
                                                    aggregation=['Library', 'Dataset', 'Horizon'])
     print('\nInformation about metrics:')
     print(metrics_table)

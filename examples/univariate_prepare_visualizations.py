@@ -9,7 +9,7 @@ def prepare_plots():
     plots_creator.execution_time_comparison()
 
     # Visualize information about metrics for different cases
-    plots_creator.metrics_comparison(metrics=['MAE', 'SMAPE'])
+    plots_creator.metrics_comparison(metrics=['SMAPE'])
 
     # For each time series plot competitors libraries
     plots_creator.compare_forecasts()

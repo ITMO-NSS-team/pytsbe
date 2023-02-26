@@ -1,9 +1,10 @@
 import os
-import pandas as pd
-import numpy as np
-import statsmodels.api as sm
-import seaborn as sns
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import statsmodels.api as sm
 from tqdm import tqdm
 
 from pytsbe.data.data import TimeSeriesDatasets
@@ -35,8 +36,9 @@ class DataExplorer:
             non_stationary_ratio = self.calculate_percentage_of_non_stationary_series(dataset)
             info.append([dataset_name, number_of_time_series, min_len, mean_len, max_len, non_stationary_ratio])
 
-        info = pd.DataFrame(info, columns=['Dataset', 'Total number of time series', 'Average row length',
-                                           'Minimal row length', 'Maximal row length', 'Percentage of non-stationary time series'])
+        info = pd.DataFrame(info, columns=['Dataset', 'Total number of time series', 'Minimal row length',
+                                           'Average row length',
+                                           'Maximal row length', 'Percentage of non-stationary time series'])
         pd.set_option('display.max_columns', None)
         print(info)
 
