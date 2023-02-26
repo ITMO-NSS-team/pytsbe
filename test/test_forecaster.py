@@ -9,6 +9,7 @@ from pytsbe.models.autots_forecaster import AutoTSForecaster
 from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.lama_forecaster import LAMAForecaster
+from pytsbe.models.autogluon_forecater import AutoGluonForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
 from test.test_data import get_dummy_dataset
 
@@ -30,10 +31,12 @@ def get_multivariate_time_series():
 
 
 @pytest.mark.parametrize('forecaster, forecaster_params',
-                         [(NaiveAverageForecaster, {}),
+                         [
+                             (NaiveAverageForecaster, {}),
                           (NaiveRepeatLastValueForecaster, {}),
                           (FedotForecaster, {'predefined_model': 'ar'}),
-                          (LAMAForecaster, {})])
+                          (LAMAForecaster, {}),
+                         (AutoGluonForecaster, {})])
 def test_univariate_models(forecaster: Callable, forecaster_params: dict):
     """ Automatically testing univariate forecasting models """
     forecast_horizon = 10
