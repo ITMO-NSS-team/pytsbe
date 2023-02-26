@@ -44,13 +44,13 @@ class TPOTForecaster(AutoMLForecaster):
     def _configure_automl_pipeline(self, window_size):
         """ Create pipeline for time series forecasting with AutoML model as final model """
         lagged_node = PrimaryNode('lagged')
-        lagged_node.custom_params = {'window_size': window_size}
-        h2o_node = SecondaryNode('tpot_regr', nodes_from=[lagged_node])
+        lagged_node.parameters = {'window_size': window_size}
+        tpot_node = SecondaryNode('tpot_regr', nodes_from=[lagged_node])
 
         automl_params = copy(self.params)
         automl_params.update({'timeout': self.remained_timeout})
 
-        h2o_node.custom_params = automl_params
-        pipeline = Pipeline(h2o_node)
+        tpot_node.parameters = automl_params
+        pipeline = Pipeline(tpot_node)
 
         return pipeline

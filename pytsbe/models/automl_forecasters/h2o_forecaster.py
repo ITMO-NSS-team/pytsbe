@@ -44,13 +44,13 @@ class H2OForecaster(AutoMLForecaster):
     def _configure_automl_pipeline(self, window_size):
         """ Create pipeline for time series forecasting with AutoML model as final model """
         lagged_node = PrimaryNode('lagged')
-        lagged_node.custom_params = {'window_size': window_size}
+        lagged_node.parameters = {'window_size': window_size}
         h2o_node = SecondaryNode('h2o_regr', nodes_from=[lagged_node])
 
         automl_params = copy(self.params)
         automl_params.update({'timeout': self.remained_timeout})
 
-        h2o_node.custom_params = automl_params
+        h2o_node.parameters = automl_params
         pipeline = Pipeline(h2o_node)
 
         return pipeline

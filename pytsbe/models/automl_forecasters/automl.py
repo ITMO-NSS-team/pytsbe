@@ -1,12 +1,16 @@
 from abc import abstractmethod
+from datetime import timedelta
 
-import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_absolute_error
+import pandas as pd
+from fedot.core.pipelines.tuning.tuner_builder import TunerBuilder
+from fedot.core.pipelines.tuning.unified import PipelineTuner
+from fedot.core.repository.quality_metrics_repository import RegressionMetricsEnum
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.fedot_forecaster import get_simple_pipeline, prepare_input_ts_data
 from pytsbe.models.forecast import Forecaster
+
 try:
     import tpot
     import h2o
@@ -59,7 +63,7 @@ class AutoMLForecaster(Forecaster):
         historical_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=True)
         forecast = self.obtained_pipeline.predict(historical_data)
 
-        lagged_params = self.obtained_pipeline.nodes[-1].custom_params
+        lagged_params = self.obtained_pipeline.nodes[-1].parameters
         window_size = lagged_params['window_size']
 
         return ForecastResults(predictions=np.ravel(np.array(forecast.predict)),
@@ -77,12 +81,16 @@ class AutoMLForecaster(Forecaster):
         """
         simple_pipeline = get_simple_pipeline()
 
-        pipeline = simple_pipeline.fine_tune_all_nodes(loss_function=mean_absolute_error,
-                                                       input_data=input_data,
-                                                       iterations=500,
-                                                       timeout=self.timeout_for_tuning)
+        tuner = TunerBuilder(input_data.task) \
+            .with_tuner(PipelineTuner) \
+            .with_metric(RegressionMetricsEnum.MAE) \
+            .with_iterations(500) \
+            .with_timeout(timedelta(seconds=self.timeout_for_tuning)) \
+            .build(input_data)
 
-        lagged_params = pipeline.nodes[-1].custom_params
+        pipeline = tuner.tune(simple_pipeline)
+
+        lagged_params = pipeline.nodes[-1].parameters
         window_size = lagged_params['window_size']
         # Get new pipeline with AutoML as operation
         automl_pipeline = self._configure_automl_pipeline(window_size)
