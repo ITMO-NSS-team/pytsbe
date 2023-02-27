@@ -1,3 +1,5 @@
+import shutil
+
 import numpy as np
 import pandas as pd
 
@@ -25,7 +27,7 @@ class AutoGluonForecaster(Forecaster):
         super().__init__(**params)
         self.target = 'value'
         self.timeout = params.get('timeout', 60)
-        self.preset = params.get('preset')
+        self.presets = params.get('presets')
         self.model = None
 
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
@@ -40,7 +42,7 @@ class AutoGluonForecaster(Forecaster):
 
         self.model.fit(
             train_data,
-            presets="medium_quality",
+            presets=self.presets,
             time_limit=self.timeout,
         )
 
@@ -61,6 +63,7 @@ class AutoGluonForecaster(Forecaster):
         )
         predictions = self.model.predict(train_data)
         predictions.head()
+        shutil.rmtree('AutogluonModels')
         return ForecastResults(predictions=predictions['mean'].values)
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
