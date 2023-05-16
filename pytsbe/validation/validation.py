@@ -5,6 +5,7 @@ from typing import Optional, List, Union
 from pytsbe.check import FailedLaunchChecker
 from pytsbe.data.data import TimeSeriesDatasets
 from pytsbe.exception import ExceptionHandler
+from pytsbe.models.autogluon_forecater import AutoGluonForecaster
 from pytsbe.models.lama_forecaster import LAMAForecaster
 from pytsbe.models.automl_forecasters.tpot_forecaster import TPOTForecaster
 from pytsbe.models.autots_forecaster import AutoTSForecaster
@@ -31,6 +32,7 @@ class Validator:
     """
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'LAMA': LAMAForecaster,
+                          'AutoGluon': AutoGluonForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
                           'prophet': ProphetForecaster,

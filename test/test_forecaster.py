@@ -3,9 +3,7 @@ from typing import Callable
 import pytest
 
 from pytsbe.data.forecast_output import ForecastResults
-from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
-from pytsbe.models.automl_forecasters.tpot_forecaster import TPOTForecaster
-from pytsbe.models.autots_forecaster import AutoTSForecaster
+from pytsbe.models.autogluon_forecater import AutoGluonForecaster
 from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.lama_forecaster import LAMAForecaster
@@ -30,10 +28,11 @@ def get_multivariate_time_series():
 
 
 @pytest.mark.parametrize('forecaster, forecaster_params',
-                         [(NaiveAverageForecaster, {}),
+                         [(LAMAForecaster, {}),
+                          (NaiveAverageForecaster, {}),
                           (NaiveRepeatLastValueForecaster, {}),
                           (FedotForecaster, {'predefined_model': 'ar'}),
-                          (LAMAForecaster, {})])
+                          (AutoGluonForecaster, {})])
 def test_univariate_models(forecaster: Callable, forecaster_params: dict):
     """ Automatically testing univariate forecasting models """
     forecast_horizon = 10
