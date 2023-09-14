@@ -4,8 +4,8 @@ from datetime import timedelta
 import numpy as np
 import pandas as pd
 from fedot.core.pipelines.tuning.tuner_builder import TunerBuilder
-from fedot.core.pipelines.tuning.unified import PipelineTuner
 from fedot.core.repository.quality_metrics_repository import RegressionMetricsEnum
+from golem.core.tuning.simultaneous import SimultaneousTuner
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.fedot_forecaster import get_simple_pipeline, prepare_input_ts_data
@@ -82,7 +82,7 @@ class AutoMLForecaster(Forecaster):
         simple_pipeline = get_simple_pipeline()
 
         tuner = TunerBuilder(input_data.task) \
-            .with_tuner(PipelineTuner) \
+            .with_tuner(SimultaneousTuner) \
             .with_metric(RegressionMetricsEnum.MAE) \
             .with_iterations(500) \
             .with_timeout(timedelta(seconds=self.timeout_for_tuning)) \

@@ -31,6 +31,12 @@ class TimeSeriesDatasets:
                                   'M4_quarterly': TimeSeriesDatasets.setup_from_long_format,
                                   'M4_weekly': TimeSeriesDatasets.setup_from_long_format,
                                   'M4_yearly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_hourly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_daily_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_monthly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_quarterly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_weekly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_yearly_test': TimeSeriesDatasets.setup_from_long_format,
                                   'dummy': TimeSeriesDatasets.setup_from_long_format}
 
         # Get appropriate method and path to dataset
@@ -162,6 +168,12 @@ dataclass_by_name = {'FRED': TimeSeriesDatasets,
                      'M4_quarterly': TimeSeriesDatasets,
                      'M4_weekly': TimeSeriesDatasets,
                      'M4_yearly': TimeSeriesDatasets,
+                     'M4_hourly_test': TimeSeriesDatasets,
+                     'M4_daily_test': TimeSeriesDatasets,
+                     'M4_monthly_test': TimeSeriesDatasets,
+                     'M4_quarterly_test': TimeSeriesDatasets,
+                     'M4_weekly_test': TimeSeriesDatasets,
+                     'M4_yearly_test': TimeSeriesDatasets,
                      'dummy': TimeSeriesDatasets,
                      'multivariate_dummy': MultivariateTimeSeriesDatasets,
                      'SSH': MultivariateTimeSeriesDatasets}
