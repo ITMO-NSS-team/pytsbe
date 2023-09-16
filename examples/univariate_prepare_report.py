@@ -7,7 +7,7 @@ def prepare_tables_with_metric():
     calculated cases.
     Task: univariate forecasting
     """
-    metrics_processor = MetricsReport(working_dir=r'Z:\pytsbe\5_launches_10_minutes')
+    metrics_processor = MetricsReport(working_dir='./example_launch')
     timeouts_table = metrics_processor.time_execution_table(aggregation=['Library', 'Dataset'])
     print('Information about execution times:')
     print(timeouts_table)
