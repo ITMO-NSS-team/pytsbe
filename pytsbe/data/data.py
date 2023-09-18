@@ -1,8 +1,8 @@
-from typing import List, Union
 from dataclasses import dataclass
+from typing import List, Union
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from pytsbe.paths import get_path_for_dataset
 
@@ -25,6 +25,18 @@ class TimeSeriesDatasets:
         format_by_dataset_name = {'FRED': TimeSeriesDatasets.setup_from_long_format,
                                   'SMART': TimeSeriesDatasets.setup_from_long_format,
                                   'TEP': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_hourly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_daily': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_monthly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_quarterly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_weekly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_yearly': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_hourly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_daily_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_monthly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_quarterly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_weekly_test': TimeSeriesDatasets.setup_from_long_format,
+                                  'M4_yearly_test': TimeSeriesDatasets.setup_from_long_format,
                                   'dummy': TimeSeriesDatasets.setup_from_long_format}
 
         # Get appropriate method and path to dataset
@@ -150,6 +162,18 @@ class MultivariateTimeSeriesDatasets:
 dataclass_by_name = {'FRED': TimeSeriesDatasets,
                      'TEP': TimeSeriesDatasets,
                      'SMART': TimeSeriesDatasets,
+                     'M4_hourly': TimeSeriesDatasets,
+                     'M4_daily': TimeSeriesDatasets,
+                     'M4_monthly': TimeSeriesDatasets,
+                     'M4_quarterly': TimeSeriesDatasets,
+                     'M4_weekly': TimeSeriesDatasets,
+                     'M4_yearly': TimeSeriesDatasets,
+                     'M4_hourly_test': TimeSeriesDatasets,
+                     'M4_daily_test': TimeSeriesDatasets,
+                     'M4_monthly_test': TimeSeriesDatasets,
+                     'M4_quarterly_test': TimeSeriesDatasets,
+                     'M4_weekly_test': TimeSeriesDatasets,
+                     'M4_yearly_test': TimeSeriesDatasets,
                      'dummy': TimeSeriesDatasets,
                      'multivariate_dummy': MultivariateTimeSeriesDatasets,
                      'SSH': MultivariateTimeSeriesDatasets}

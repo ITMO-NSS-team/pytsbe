@@ -11,10 +11,11 @@ def prepare_tables_with_metric():
     timeouts_table = metrics_processor.time_execution_table(aggregation=['Library', 'Dataset'])
     print('Information about execution times:')
     print(timeouts_table)
-
+    timeouts_table.to_csv('times.csv')
     # Calculate and display information about metrics during validation
-    metrics_table = metrics_processor.metric_table(metrics=['SMAPE'],
+    metrics_table = metrics_processor.metric_table(metrics=['MAE', 'SMAPE'],
                                                    aggregation=['Library', 'Dataset', 'Horizon'])
+    metrics_table.to_csv('metric.csv')
     print('\nInformation about metrics:')
     print(metrics_table)
 
