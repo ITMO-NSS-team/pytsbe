@@ -6,7 +6,7 @@ import pandas as pd
 
 try:
     from autogluon.timeseries import TimeSeriesDataFrame, TimeSeriesPredictor
-except ImportError:
+except Exception:
     print('Does not found AutoGluon library. Continue...')
 
 from pytsbe.data.forecast_output import ForecastResults

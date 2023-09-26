@@ -28,13 +28,15 @@ class FedotForecaster(Forecaster):
 
     def __init__(self, **params):
         super().__init__(**params)
-        default_params = {'timeout': 5, 'preset': 'ts',
-                          'predefined_model': None,
+        default_params = {'timeout': 5,
                           'n_jobs': 1}
+        self.fit_params = {'predefined_model': params.get('predefined_model', None)}
+
+        params.pop('predefined_moedel', 0)
         if params is not None:
-            self.params = {**default_params, **params}
+            self.init_params = {**default_params, **params}
         else:
-            self.params = default_params
+            self.init_params = default_params
 
         self.obtained_pipeline = None
 
@@ -45,12 +47,10 @@ class FedotForecaster(Forecaster):
         # Initialize model
         task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
-                           timeout=self.params['timeout'],
-                           preset=self.params['preset'],
-                           n_jobs=self.params['n_jobs'])
+                           **self.init_params)
 
         self.obtained_pipeline = self.model.fit(features=train_data,
-                                                predefined_model=self.params['predefined_model'])
+                                                **self.fit_params)
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
                             target_column: str, predictors_columns: list, **kwargs):
@@ -62,11 +62,10 @@ class FedotForecaster(Forecaster):
 
         task_parameters = TsForecastingParams(forecast_length=forecast_horizon)
         self.model = Fedot(problem='ts_forecasting', task_params=task_parameters,
-                           timeout=self.params['timeout'], preset=self.params['preset'],
-                           n_jobs=self.params['n_jobs'])
+                           **self.init_params)
         self.obtained_pipeline = self.model.fit(features=train_data,
                                                 target=np.array(historical_values[target_column]),
-                                                predefined_model=self.params['predefined_model'])
+                                                **self.fit_params)
 
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Use obtained pipeline to make predictions """
