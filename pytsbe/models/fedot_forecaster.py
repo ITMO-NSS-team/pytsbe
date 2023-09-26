@@ -30,14 +30,9 @@ class FedotForecaster(Forecaster):
         super().__init__(**params)
         default_params = {'timeout': 5,
                           'n_jobs': 1}
-        self.fit_params = {'predefined_model': params.get('predefined_model', None)}
+        self.fit_params = {'predefined_model': params.pop('predefined_model', None)}
 
-        params.pop('predefined_moedel', 0)
-        if params is not None:
-            self.init_params = {**default_params, **params}
-        else:
-            self.init_params = default_params
-
+        self.init_params = {**default_params, **params}
         self.obtained_pipeline = None
 
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
