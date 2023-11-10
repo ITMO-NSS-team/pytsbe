@@ -15,12 +15,14 @@ from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
 from pytsbe.models.forecast import find_target_and_exog_variables
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
+from pytsbe.models.nbeats_forecaster import NBEATSForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.models.prophet_forecaster import ProphetForecaster
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.timer import BenchmarkTimer
 
 import warnings
+
 warnings.filterwarnings('ignore')
 
 
@@ -33,6 +35,7 @@ class Validator:
     forecaster_by_name = {'FEDOT': FedotForecaster,
                           'LAMA': LAMAForecaster,
                           'AutoGluon': AutoGluonForecaster,
+                          'NBEATS': NBEATSForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
                           'prophet': ProphetForecaster,
