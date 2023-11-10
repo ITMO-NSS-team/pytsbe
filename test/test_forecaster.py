@@ -8,6 +8,7 @@ from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.lama_forecaster import LAMAForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
+from pytsbe.models.nbeats_forecaster import NBEATSForecaster
 from test.test_data import get_dummy_dataset
 
 
@@ -32,7 +33,8 @@ def get_multivariate_time_series():
                           (NaiveAverageForecaster, {}),
                           (NaiveRepeatLastValueForecaster, {}),
                           (FedotForecaster, {'predefined_model': 'ar'}),
-                          (AutoGluonForecaster, {})])
+                          (AutoGluonForecaster, {}),
+                          (NBEATSForecaster, {'accelerator': 'gpu'})])
 def test_univariate_models(forecaster: Callable, forecaster_params: dict):
     """ Automatically testing univariate forecasting models """
     forecast_horizon = 10
