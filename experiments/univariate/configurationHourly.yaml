@@ -1,0 +1,9 @@
+libraries: {FEDOT:{'timeout': 2}
+}
+
+# Additional parameters
+datasets: ['M4_hourly_test']
+launches: 1
+clip_border: 2000
+validation_blocks: 1
+horizons: [48]

@@ -34,7 +34,7 @@ def get_multivariate_time_series():
                           (NaiveRepeatLastValueForecaster, {}),
                           (FedotForecaster, {'predefined_model': 'ar'}),
                           (AutoGluonForecaster, {}),
-                          (NBEATSForecaster, {'accelerator': 'gpu'})])
+                          (NBEATSForecaster, {})])
 def test_univariate_models(forecaster: Callable, forecaster_params: dict):
     """ Automatically testing univariate forecasting models """
     forecast_horizon = 10
