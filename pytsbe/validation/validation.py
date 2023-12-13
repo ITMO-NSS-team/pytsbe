@@ -20,7 +20,7 @@ from pytsbe.models.nn_forecasters.auto_mlp_forecaster import MLPForecaster
 from pytsbe.models.nn_forecasters.auto_nbeats_forecaster import NBEATSForecaster
 from pytsbe.models.nn_forecasters.auto_nhits_forecaster import NHITSForecaster
 from pytsbe.models.nn_forecasters.auto_timesnet_forecater import TimesNetForecaster
-from pytsbe.models.nn_forecasters.patch_tst_forecaster import PatchTSTForecaster
+from pytsbe.models.nn_forecasters.auto_patch_tst_forecaster import PatchTSTForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.models.prophet_forecaster import ProphetForecaster
 from pytsbe.data.forecast_output import ForecastResults
