@@ -92,12 +92,13 @@ class Validator:
                     continue
 
                 exception_handler = ExceptionHandler(ts_label, horizon)
+                with exception_handler.safe_process_launch():
 
-                # Prepare model for current forecast horizon
-                results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
+                    # Prepare model for current forecast horizon
+                    results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
 
-                # Save all the necessary results
-                self.library_serializer.save_information(ts_label, horizon, results)
+                    # Save all the necessary results
+                    self.library_serializer.save_information(ts_label, horizon, results)
 
     def _perform_experiment_on_single_ts(self, forecaster, time_series: pd.DataFrame,
                                          horizon: int, validation_blocks: Union[int, None]) -> ForecastResults:
