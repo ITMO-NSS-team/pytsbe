@@ -8,7 +8,7 @@ from pytsbe.models.average_forecaster import NaiveAverageForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.lama_forecaster import LAMAForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
-from pytsbe.models.nbeats_forecaster import NBEATSForecaster
+from pytsbe.models.nn_forecasters.auto_timesnet_forecater import NBEATSForecaster
 from test.test_data import get_dummy_dataset
 
 

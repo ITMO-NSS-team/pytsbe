@@ -39,11 +39,11 @@ class Forecaster:
         """ There is a needed to implement method to train model for forecasting univariate time series """
         raise NotImplementedError()
 
-    @abstractmethod
+
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
                             target_column: str, predictors_columns: list, **kwargs):
         """ There is a needed to implement method to train model for forecasting multivariate time series """
-        raise NotImplementedError()
+        raise NotImplementedError(f'{self.__class__} does not have method for multivariate ts')
 
     def predict(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs) -> ForecastResults:
         """ Generate predictions based on historical values for only one forecast horizon """
@@ -60,7 +60,7 @@ class Forecaster:
 
     @abstractmethod
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
-        raise NotImplementedError()
+        raise NotImplementedError(f'{self.__class__} does not have method for multivariate ts')
 
     @abstractmethod
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,

@@ -1,4 +1,4 @@
-libraries: { FEDOT: { 'timeout': 10 },
+libraries: { FEDOT: { 'timeout': 2 },
              AutoTS: { 'frequency': 'infer',
                        'prediction_interval': 0.9,
                        'max_generations': 10,
