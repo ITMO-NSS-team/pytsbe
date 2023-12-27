@@ -26,4 +26,3 @@ class GRUForecaster(NNForecaster):
         gpus = int(self.accelerator == 'gpu')
         model = AutoGRU(h=forecast_horizon, gpus=gpus, backend='optuna')
         return model
-

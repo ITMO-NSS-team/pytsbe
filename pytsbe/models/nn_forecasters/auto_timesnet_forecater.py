@@ -25,4 +25,3 @@ class TimesNetForecaster(NNForecaster):
         gpus = int(self.accelerator == 'gpu')
         model = AutoTimesNet(h=forecast_horizon, gpus=gpus, backend='optuna')
         return model
-
