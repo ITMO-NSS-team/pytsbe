@@ -1,6 +1,11 @@
-libraries: {FEDOT:{'timeout': 2}
+libraries: {
+  NBEATS: {'accelerator': 'gpu'},
+  NHITS: {'accelerator': 'gpu'},
+  GRU: {'accelerator': 'gpu'},
+  MLP: {'accelerator': 'gpu'},
+  TimesNet: {'accelerator': 'gpu'},
+  PatchTST: {'accelerator': 'gpu'}
 }
-
 # Additional parameters
 datasets: ['M4_weekly_test']
 launches: 1

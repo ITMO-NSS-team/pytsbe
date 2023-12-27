@@ -15,7 +15,12 @@ from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
 from pytsbe.models.forecast import find_target_and_exog_variables
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
-from pytsbe.models.nbeats_forecaster import NBEATSForecaster
+from pytsbe.models.nn_forecasters.auto_gru_forecaster import GRUForecaster
+from pytsbe.models.nn_forecasters.auto_mlp_forecaster import MLPForecaster
+from pytsbe.models.nn_forecasters.auto_nbeats_forecaster import NBEATSForecaster
+from pytsbe.models.nn_forecasters.auto_nhits_forecaster import NHITSForecaster
+from pytsbe.models.nn_forecasters.auto_timesnet_forecater import TimesNetForecaster
+from pytsbe.models.nn_forecasters.auto_patch_tst_forecaster import PatchTSTForecaster
 from pytsbe.models.pmdarima_forecaster import ARIMAForecaster
 from pytsbe.models.prophet_forecaster import ProphetForecaster
 from pytsbe.data.forecast_output import ForecastResults
@@ -36,6 +41,11 @@ class Validator:
                           'LAMA': LAMAForecaster,
                           'AutoGluon': AutoGluonForecaster,
                           'NBEATS': NBEATSForecaster,
+                          'NHITS': NHITSForecaster,
+                          'MLP': MLPForecaster,
+                          'GRU': GRUForecaster,
+                          'TimesNet': TimesNetForecaster,
+                          'PatchTST': PatchTSTForecaster,
                           'AutoTS': AutoTSForecaster,
                           'pmdarima': ARIMAForecaster,
                           'prophet': ProphetForecaster,
@@ -83,6 +93,7 @@ class Validator:
 
                 exception_handler = ExceptionHandler(ts_label, horizon)
                 with exception_handler.safe_process_launch():
+
                     # Prepare model for current forecast horizon
                     results = self._perform_experiment_on_single_ts(forecaster, time_series, horizon, validation_blocks)
 
