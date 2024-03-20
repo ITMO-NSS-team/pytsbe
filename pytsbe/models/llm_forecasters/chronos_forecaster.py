@@ -17,7 +17,7 @@ class ChronosForecaster(Forecaster):
     def __init__(self, **params):
         super().__init__(**params)
         self.target = 'value'
-        self.forecaster = self.__load_pretrained_pipeline()
+        self.forecaster = self.__load_pretrained_pipeline(params.get('hf_model', 'amazon/chronos-t5-tiny'))
 
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         pass
@@ -38,8 +38,9 @@ class ChronosForecaster(Forecaster):
         raise NotImplementedError('Chronos does not support predict for multivariate time series forecasting')
 
     @staticmethod
-    def __load_pretrained_pipeline() -> ChronosPipeline:
+    def __load_pretrained_pipeline(hf_model: str) -> ChronosPipeline:
         return ChronosPipeline.from_pretrained(
-            'amazon/chronos-t5-small',
+            hf_model,
             torch_dtype=torch.bfloat16,
+            device_map="cuda" if torch.cuda.is_available() else "cpu"
         )
