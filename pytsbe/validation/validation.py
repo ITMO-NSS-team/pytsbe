@@ -14,6 +14,7 @@ from pytsbe.models.ets_forecaster import ETSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
 from pytsbe.models.forecast import find_target_and_exog_variables
+from pytsbe.models.llm_forecasters.chronos_forecaster import ChronosForecaster
 from pytsbe.models.llm_forecasters.lagllama_forecaster import LagLlamaForecaster
 from pytsbe.models.llm_forecasters.timegpt_forecaster import TimeGPTForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
@@ -57,7 +58,8 @@ class Validator:
                           'average': NaiveAverageForecaster,
                           'ets': ETSForecaster,
                           'LAGLLAMA': LagLlamaForecaster,
-                          'TimeGPT': TimeGPTForecaster}
+                          'TimeGPT': TimeGPTForecaster,
+                          'Chronos': ChronosForecaster}
 
     def __init__(self, dataset_name: str, launch_number: int, library_name: str,
                  library_parameters: dict, library_serializer):
