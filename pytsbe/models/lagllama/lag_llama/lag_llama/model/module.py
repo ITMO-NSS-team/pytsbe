@@ -468,7 +468,7 @@ class LagLlamaModel(nn.Module):
                 (
                     scaled_past_target[..., max(self.lags_seq):],  # Just the context
                     (future_target[..., :-1] - loc)
-                    / scale,  # Not sure about the -1 here. 
+                    / scale,  # Not sure about the -1 here.
                     # Maybe so since the last value isn't used in the model for prediction of any new values.
                     # Also if the prediction length is 1, this doesn't really affect anything
                 ),
