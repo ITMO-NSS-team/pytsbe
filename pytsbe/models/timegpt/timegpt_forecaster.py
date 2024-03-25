@@ -11,6 +11,11 @@ except ImportError:
 
 
 class TimeGPTForecaster(Forecaster):
+    """
+    Class for time series forecasting with Nixtla TimeGPT
+    Source code: https://github.com/Nixtla/nixtla
+    """
+
     def __init__(self, **params):
         super().__init__(**params)
         self.target = 'value'

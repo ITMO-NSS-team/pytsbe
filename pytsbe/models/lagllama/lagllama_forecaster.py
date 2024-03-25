@@ -6,11 +6,13 @@ import pandas as pd
 from gluonts.dataset.pandas import PandasDataset
 from gluonts.evaluation import make_evaluation_predictions
 from gluonts.model.forecast import Forecast
+from pathlib import Path
 from typing import List, Optional
 
 from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
-from pytsbe.models.llm_forecasters.lag_llama.lag_llama.gluon.estimator import LagLlamaEstimator
+from pytsbe.models.lagllama.lag_llama.lag_llama.gluon.estimator import LagLlamaEstimator
+from pytsbe.paths import get_project_path
 
 
 class LagLlamaForecaster(Forecaster):
@@ -58,8 +60,11 @@ class LagLlamaForecaster(Forecaster):
 
     @staticmethod
     def __load_ckpt(forecast_horizon: int):
-        ckpt_path = 'lag_llama.ckpt'
-        estimator_args = torch.load(ckpt_path, map_location=torch.device('cpu'))['hyper_parameters']['model_kwargs']
+        ckpt_path = Path(get_project_path()).joinpath('pytsbe/models/lagllama/lag_llama/lag_llama.ckpt')
+        estimator_args = torch.load(
+            str(ckpt_path),
+            map_location=torch.device('cpu')
+        )['hyper_parameters']['model_kwargs']
         return LagLlamaEstimator(
             ckpt_path=ckpt_path,
             prediction_length=forecast_horizon,

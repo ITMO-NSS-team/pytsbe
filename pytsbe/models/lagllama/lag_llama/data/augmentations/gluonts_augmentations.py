@@ -107,7 +107,8 @@ class Scaling(nn.Module):
             return x
 
         # Generate random scaling factors from a normal distribution with mean 1 and standard deviation 'sigma'.
-        # The size of the scaling factor tensor is tailored to match the batch and time dimensions of the input tensor 'x',
+        # The size of the scaling factor tensor is tailored to match the batch and time dimensions
+        # of the input tensor 'x',
         # but it has a single channel so that the same factor is applied across all channels.
         factor = torch.normal(
             mean=1.0, std=self.sigma, size=(x.shape[0], 1, x.shape[2]), device=x.device
@@ -169,7 +170,8 @@ class Permutation(nn.Module):
         # 'max_segments' defines the maximum number of segments into which the data can be split for permutation.
         self.max_segments = max_segments
 
-        # 'seg_mode' determines how the segments are created: 'equal' for equal-sized segments, 'random' for random splits.
+        # 'seg_mode' determines how the segments are created:
+        # 'equal' for equal-sized segments, 'random' for random splits.
         self.seg_mode = seg_mode
 
     def forward(self, x):
@@ -334,7 +336,8 @@ class WindowSlice(nn.Module):
     The WindowSlice class implements a data augmentation technique where a slice of the input data
     is stretched to fill the entire length of the input. This technique is useful for training models
     to focus on local features of the data and can be found in literature such as:
-    'Time Series Data Augmentation for Deep Learning: A Survey' (https://halshs.archives-ouvertes.fr/halshs-01357973/document).
+    'Time Series Data Augmentation for Deep Learning: A Survey' \
+        (https://halshs.archives-ouvertes.fr/halshs-01357973/document).
     """
 
     def __init__(self, p, reduce_ratio=0.9):
@@ -369,7 +372,7 @@ class WindowSlice(nn.Module):
                 warp = np.interp(
                     np.linspace(0, target_len, num=x.shape[1]),
                     np.arange(target_len),
-                    pat[starts[i] : ends[i], dim].cpu().numpy(),
+                    pat[starts[i]:ends[i], dim].cpu().numpy(),
                 ).T
                 # Apply the stretched slice to the corresponding dimension of the data.
                 ret[i, :, dim] = torch.from_numpy(warp).float().to(x.device)
@@ -381,7 +384,8 @@ class WindowWarp(nn.Module):
     The WindowWarp class implements a data augmentation technique where a segment (window) of the input data
     is selected and warped in size. This technique is useful for simulating variations in the speed or rate
     of the data within a certain window, as discussed in:
-    'Time Series Data Augmentation for Deep Learning: A Survey' (https://halshs.archives-ouvertes.fr/halshs-01357973/document).
+    'Time Series Data Augmentation for Deep Learning: A Survey' \
+        (https://halshs.archives-ouvertes.fr/halshs-01357973/document).
     """
 
     def __init__(self, p, window_ratio=0.1, scales=[0.5, 2.0]):
@@ -426,9 +430,9 @@ class WindowWarp(nn.Module):
                         num=int(warp_size * warp_scales[i]),
                     ),
                     window_steps,
-                    pat[window_starts[i] : window_ends[i], dim].cpu().numpy(),
+                    pat[window_starts[i]:window_ends[i], dim].cpu().numpy(),
                 )
-                end_seg = pat[window_ends[i] :, dim].cpu().numpy()
+                end_seg = pat[window_ends[i]:, dim].cpu().numpy()
 
                 # Concatenate the segments and stretch them to fit the original data length.
                 warped = np.concatenate((start_seg, window_seg, end_seg))

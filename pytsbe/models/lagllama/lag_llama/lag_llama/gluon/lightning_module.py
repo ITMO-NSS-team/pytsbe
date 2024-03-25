@@ -3,10 +3,6 @@ import inspect
 import os
 import sys
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(os.path.dirname(currentdir))
-sys.path.insert(0, parentdir)
-
 import numpy as np
 import pytorch_lightning as pl
 import torch
@@ -29,12 +25,13 @@ from data.augmentations.gluonts_augmentations import (
     WindowSlice,
     WindowWarp,
 )
-
-from gluon_utils.gluon_ts_distributions.implicit_quantile_network import (
-    ImplicitQuantileNetworkOutput,
-)
-
+from gluon_utils.gluon_ts_distributions.implicit_quantile_network import ImplicitQuantileNetworkOutput
 from lag_llama.model.module import LagLlamaModel
+
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.insert(0, parentdir)
 
 
 class LagLlamaLightningModule(pl.LightningModule):
@@ -302,11 +299,11 @@ class LagLlamaLightningModule(pl.LightningModule):
 
         future_target_reshaped = future_target.reshape(
             -1,
-            *future_target.shape[extra_dims + 1 :],
+            *future_target.shape[extra_dims + 1:],
         )  # (bsz, model.prediction_length)
         future_observed_reshaped = future_observed_values.reshape(
             -1,
-            *future_observed_values.shape[extra_dims + 1 :],
+            *future_observed_values.shape[extra_dims + 1:],
         )  # (bsz, model.prediction_length)
 
         distr_args, loc, scale = self.model(
@@ -344,7 +341,9 @@ class LagLlamaLightningModule(pl.LightningModule):
         else:
             distr = self.model.distr_output.distribution(
                 distr_args, loc=loc, scale=scale
-            )  # an object representing a distribution with the specified parameters. We need this to compute the NLL loss.
+            )  # an object representing a distribution with the specified parameters.
+            # We need this to compute the NLL loss.
+
             if not do_not_average:
                 loss = (
                     self.loss(distr, target) * observed_values

@@ -160,7 +160,7 @@ class LlamaDynamicNTKScalingRotaryEmbedding(LlamaRotaryEmbedding):
 def rotate_half(x):
     """Rotates half the hidden dims of the input."""
     x1 = x[..., : x.shape[-1] // 2]
-    x2 = x[..., x.shape[-1] // 2 :]
+    x2 = x[..., x.shape[-1] // 2:]
     return torch.cat((-x2, x1), dim=-1)
 
 
@@ -459,31 +459,34 @@ class LagLlamaModel(nn.Module):
     ):
         scaled_past_target, loc, scale = self.scaler(
             past_target, past_observed_values
-        )  # Data is standardized (past_observed_values is passed as "weights" parameter) # (bsz, context_length+max(self.lags_seq)
+        )  # Data is standardized (past_observed_values is passed as "weights" parameter)
+        # (bsz, context_length+max(self.lags_seq)
 
         # In the below code, instead of max(self.lags_seq), it was previously -self.context_length
         if future_target is not None:
             input = torch.cat(
                 (
-                    scaled_past_target[..., max(self.lags_seq) :],  # Just the context
+                    scaled_past_target[..., max(self.lags_seq):],  # Just the context
                     (future_target[..., :-1] - loc)
-                    / scale,  # Not sure about the -1 here. Maybe so since the last value isn't used in the model for prediction of any new values. also if the prediction length is 1, this doesn't really affect anything
+                    / scale,  # Not sure about the -1 here. 
+                    # Maybe so since the last value isn't used in the model for prediction of any new values.
+                    # Also if the prediction length is 1, this doesn't really affect anything
                 ),
                 dim=-1,
             )  # Shape is (bsz, context_length+(pred_len-1))
         else:
-            input = scaled_past_target[..., max(self.lags_seq) :]
+            input = scaled_past_target[..., max(self.lags_seq):]
         if (past_time_feat is not None) and (future_time_feat is not None):
             time_feat = (
                 torch.cat(
                     (
-                        past_time_feat[..., max(self.lags_seq) :, :],
+                        past_time_feat[..., max(self.lags_seq):, :],
                         future_time_feat[..., :-1, :],
                     ),
                     dim=1,
                 )
                 if future_time_feat is not None
-                else past_time_feat[..., max(self.lags_seq) :, :]
+                else past_time_feat[..., max(self.lags_seq):, :]
             )
 
         prior_input = (
@@ -536,7 +539,8 @@ class LagLlamaModel(nn.Module):
         # forward the LLaMA model itself
         x = self.transformer.wte(
             transformer_input
-        )  # token embeddings of shape (b, t, n_embd_per_head*n_head) # (bsz, context_length+(pred_len-1), n_embd_per_head*n_head)
+        )  # token embeddings of shape (b, t, n_embd_per_head*n_head)
+        # (bsz, context_length+(pred_len-1), n_embd_per_head*n_head)
 
         for block in self.transformer.h:
             x = block(x, use_kv_cache)

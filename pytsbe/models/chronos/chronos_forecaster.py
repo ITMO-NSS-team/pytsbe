@@ -14,6 +14,11 @@ except ImportError:
 
 
 class ChronosForecaster(Forecaster):
+    """
+    Class for time series forecasting with Chronos pretrained models
+    Source code: https://github.com/amazon-science/chronos-forecasting
+    """
+
     def __init__(self, **params):
         super().__init__(**params)
         self.target = 'value'

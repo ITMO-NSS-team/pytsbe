@@ -14,9 +14,9 @@ from pytsbe.models.ets_forecaster import ETSForecaster
 from pytsbe.models.fedot_forecaster import FedotForecaster
 from pytsbe.models.automl_forecasters.h2o_forecaster import H2OForecaster
 from pytsbe.models.forecast import find_target_and_exog_variables
-from pytsbe.models.llm_forecasters.chronos_forecaster import ChronosForecaster
-from pytsbe.models.llm_forecasters.lagllama_forecaster import LagLlamaForecaster
-from pytsbe.models.llm_forecasters.timegpt_forecaster import TimeGPTForecaster
+from pytsbe.models.chronos.chronos_forecaster import ChronosForecaster
+from pytsbe.models.lagllama.lagllama_forecaster import LagLlamaForecaster
+from pytsbe.models.timegpt.timegpt_forecaster import TimeGPTForecaster
 from pytsbe.models.naive_repeat_forecaster import NaiveRepeatLastValueForecaster
 from pytsbe.models.nn_forecasters.auto_gru_forecaster import GRUForecaster
 from pytsbe.models.nn_forecasters.auto_mlp_forecaster import MLPForecaster
