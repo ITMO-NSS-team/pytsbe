@@ -1,8 +1,6 @@
-python_version >= '3.8'
-fedot==0.7.2
+fedot
 autots==0.4.0
-fbprophet==0.7.1
 pmdarima==1.8.5
-tqdm==4.64.0
+tqdm
 autogluon==0.8.2
 pyyaml
