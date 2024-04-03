@@ -5,7 +5,7 @@ from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
 
 try:
-    from nixtlats import TimeGPT
+    from nixtlats import NixtlaClient
 except ImportError:
     print('Does not found nixtlats. Continue...')
 
@@ -19,8 +19,8 @@ class TimeGPTForecaster(Forecaster):
     def __init__(self, **params):
         super().__init__(**params)
         self.target = 'value'
-        self.timegpt = TimeGPT(token=params.get('token'))
-        if not self.timegpt.validate_token():
+        self.timegpt = NixtlaClient(api_key=params.get('token'))
+        if not self.timegpt.validate_api_key():
             raise Exception('Provide a valid TimeGPT token in configuration')
 
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
