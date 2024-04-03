@@ -3,6 +3,12 @@ import inspect
 import os
 import sys
 
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(os.path.dirname(currentdir))
+sys.path.insert(0, parentdir)
+
+
 import numpy as np
 import pytorch_lightning as pl
 import torch
@@ -27,11 +33,6 @@ from data.augmentations.gluonts_augmentations import (
 )
 from gluon_utils.gluon_ts_distributions.implicit_quantile_network import ImplicitQuantileNetworkOutput
 from lag_llama.model.module import LagLlamaModel
-
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(os.path.dirname(currentdir))
-sys.path.insert(0, parentdir)
 
 
 class LagLlamaLightningModule(pl.LightningModule):
