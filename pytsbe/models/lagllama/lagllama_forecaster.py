@@ -66,7 +66,7 @@ class LagLlamaForecaster(Forecaster):
             map_location=torch.device('cpu')
         )['hyper_parameters']['model_kwargs']
         return LagLlamaEstimator(
-            ckpt_path=ckpt_path,
+            ckpt_path=str(ckpt_path),
             prediction_length=forecast_horizon,
             context_length=32,
             input_size=estimator_args['input_size'],
