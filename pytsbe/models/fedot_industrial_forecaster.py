@@ -32,18 +32,18 @@ class FedotIndustrialForecaster(Forecaster):
             'industrial_strategy': 'forecasting_assumptions'
         }
         self.init_params = {**default_params, **params}
-        self.obtained_pipeline = None
+        self.obtained_model = None
 
     def fit_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Train FEDOT.Industrial framework (launch AutoML algorithm) """
         input_data = prepare_input_ts_data(historical_values, forecast_horizon)
 
         # Initialize model
-        self.model = FedotIndustrial(problem='ts_forecasting',
+        model = FedotIndustrial(problem='ts_forecasting',
                                      task_params={'forecast_length': forecast_horizon},
                                      **self.init_params)
-
-        self.obtained_pipeline = self.model.fit(input_data)
+        model.fit(input_data)
+        self.obtained_model = model
 
     def fit_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
                             target_column: str, predictors_columns: list, **kwargs):
@@ -53,22 +53,22 @@ class FedotIndustrialForecaster(Forecaster):
     def predict_univariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int, **kwargs):
         """ Use obtained pipeline to make predictions """
         input_data = prepare_input_ts_data(historical_values, forecast_horizon)
-        auto_labels = self.obtained_pipeline.predict(input_data)
+        auto_labels = self.obtained_model.predict(input_data)
 
         min_metric = float('inf')
         metric = self.init_params.get('metric', 'smape')
         for forecast_model, predict in auto_labels.items():
-            self.obtained_pipeline.predicted_labels = predict
+            self.obtained_model.predicted_labels = predict
 
-            current_metric = self.obtained_pipeline.get_metrics(
+            current_metric = self.obtained_model.get_metrics(
                 target=input_data[1],
-                metric_names=tuple(metric)
+                metric_names=tuple([metric])
             )
             if float(current_metric[metric]) < min_metric:
                 min_metric = current_metric
                 forecast = predict
 
-        result = ForecastResults(predictions=forecast, additional_info={'fedot_api_object': self.model})
+        result = ForecastResults(predictions=forecast, additional_info={'fedot_api_object': self.obtained_model})
         return result
 
     def predict_multivariate_ts(self, historical_values: pd.DataFrame, forecast_horizon: int,
