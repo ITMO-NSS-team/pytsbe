@@ -2,10 +2,9 @@ import pandas as pd
 import numpy as np
 import shutil
 
-from fedot_ind.core.repository.config_repository import DEFAULT_COMPUTE_CONFIG
-
 try:
     from fedot_ind.api.main import FedotIndustrial
+    from fedot_ind.core.repository.config_repository import DEFAULT_COMPUTE_CONFIG
 except ImportError:
     print('Does not found Fedot.Industrial library. Continue...')
 
@@ -34,8 +33,8 @@ class FedotIndustrialForecaster(Forecaster):
         input_data = prepare_input_ts_data(historical_values, forecast_horizon, is_for_forecast=False)
 
         task_params = {'forecast_length': forecast_horizon}
-        self.init_params['automl_config']['task_params'] = task_params
         self.init_params['industrial_config']['task_params'] = task_params
+        self.init_params['automl_config']['task_params'] = task_params
 
         model = FedotIndustrial(**self.init_params)
         model.fit(input_data)
@@ -76,7 +75,7 @@ def init_default_config():
                                          threads_per_worker=2,
                                          memory_limit=0.3)
     AUTOML_CONFIG = {'task': 'ts_forecasting',
-                     'task_params': {'forecast_length': 14},
+                     'task_params': {'forecast_length': 1},
                      'use_automl': True,
                      'optimisation_strategy': {'optimisation_strategy':
                                                    {'mutation_agent': 'random',
@@ -89,9 +88,9 @@ def init_default_config():
                                     logging_level=20)
     LEARNING_CONFIG = {'learning_strategy': 'from_scratch',
                        'learning_strategy_params': AUTOML_LEARNING_STRATEGY,
-                       'optimisation_loss': {'quality_loss': 'smape'}}
+                       'optimisation_loss': {'quality_loss': 'rmse'}}
     INDUSTRIAL_CONFIG = {'problem': 'ts_forecasting',
-                         'task_params': {'forecast_length': 14}}
+                         'task_params': {'forecast_length': 1}}
 
     return {'industrial_config': INDUSTRIAL_CONFIG,
             'automl_config': AUTOML_CONFIG,
