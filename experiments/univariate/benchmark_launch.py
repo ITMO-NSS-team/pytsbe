@@ -7,7 +7,7 @@ seasons = ['Daily', 'Monthly', 'Quarterly', 'Weekly', 'Yearly']
 
 def start_benchmark():
     """ Launch benchmark with desired configuration """
-    print(torch.cuda.is_available())
+    print(f'CUDA is available: {torch.cuda.is_available()}')
     for season in seasons:
         pytsbe = BenchmarkUnivariate(working_dir=f'./benchmark_results_{season}',
                                      config_path=f'configuration{season}.yaml')
