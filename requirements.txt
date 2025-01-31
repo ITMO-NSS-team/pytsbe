@@ -1,6 +1,10 @@
-fedot
-autots==0.4.0
-pmdarima==1.8.5
-tqdm
-autogluon==0.8.2
-pyyaml
+fedot @ git+https://github.com/aimclub/FEDOT.git
+fedot_ind @ git+https://github.com/aimclub/Fedot.Industrial.git@industrial_release_0.5
+autots==0.6.17
+pmdarima==2.0.4
+tqdm==4.66.6
+autogluon==1.2
+pyyaml==6.0.2
+neuralforecast==2.0.1
+chronos-forecasting==1.4.1
+gluonts==0.14.4
