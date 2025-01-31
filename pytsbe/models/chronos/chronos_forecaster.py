@@ -1,4 +1,3 @@
-import copy
 import numpy as np
 import pandas as pd
 import torch
@@ -7,7 +6,7 @@ from pytsbe.data.forecast_output import ForecastResults
 from pytsbe.models.forecast import Forecaster
 
 try:
-    from chronos import ChronosPipeline
+    from chronos import BaseChronosPipeline
 except ImportError:
     print('Try installing Chronos via pip install '
           'git+https://github.com/amazon-science/chronos-forecasting.git')
@@ -43,8 +42,8 @@ class ChronosForecaster(Forecaster):
         raise NotImplementedError('Chronos does not support predict for multivariate time series forecasting')
 
     @staticmethod
-    def __load_pretrained_pipeline(hf_model: str) -> ChronosPipeline:
-        return ChronosPipeline.from_pretrained(
+    def __load_pretrained_pipeline(hf_model: str) -> BaseChronosPipeline:
+        return BaseChronosPipeline.from_pretrained(
             hf_model,
             torch_dtype=torch.bfloat16,
             device_map="cuda" if torch.cuda.is_available() else "cpu"
