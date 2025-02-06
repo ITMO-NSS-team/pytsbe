@@ -36,6 +36,7 @@ class DefaultLibrarySerializer:
         storage_path = self.storage_paths[f'{self.dataset_name}_{self.launch_number}_{self.library_name}']
 
         # Save prediction and actual values into csv file
+        import pandas as pd; pd.set_option('mode.chained_assignment', 'warn')
         forecast.true_values['predict'] = forecast.predictions
         path_to_save = os.path.join(storage_path, f'{ts_id}_{horizon}_forecast_vs_actual.csv')
         forecast.true_values.to_csv(path_to_save, index=False)

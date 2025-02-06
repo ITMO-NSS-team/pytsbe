@@ -4,7 +4,7 @@ from datetime import timedelta
 import numpy as np
 import pandas as pd
 from fedot.core.pipelines.tuning.tuner_builder import TunerBuilder
-from fedot.core.repository.quality_metrics_repository import RegressionMetricsEnum
+from fedot.core.repository.metrics_repository import RegressionMetricsEnum
 from golem.core.tuning.simultaneous import SimultaneousTuner
 
 from pytsbe.data.forecast_output import ForecastResults
