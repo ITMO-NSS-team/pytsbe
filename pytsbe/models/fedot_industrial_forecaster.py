@@ -39,7 +39,7 @@ class FedotIndustrialForecaster(Forecaster):
         model = FedotIndustrial(**self.init_params)
         model.fit(input_data)
         self.obtained_model = model
-
+        self.obtained_model.shutdown()
         # # TODO: remove when composition history managing becomes a responsibility of Fedot.Industrial
         # shutil.rmtree(model.config_dict.get('history_dir'))
 
