@@ -1,128 +1,167 @@
-<img src="./docs/images/pytsbe_logo.png" width="700"/>
+# pytsbe
 
-**Py**thon **t**ime **s**eries **be**nchmark. The main goal of this repository is to allow researchers and developers 
-to compare several time series forecasting models or libraries. The repository contains data and the necessary wrappers 
-for forecasting univariate and multivariate time series.
+---
 
-## Description
+![License](https://img.shields.io/github/license/ITMO-NSS-team/pytsbe?style=flat&logo=opensourceinitiative&logoColor=white&color=blue)
+[![OSA-improved](https://img.shields.io/badge/improved%20by-OSA-yellow)](https://github.com/aimclub/OSA)
 
-### Univariate time series
+---
 
-#### Libraries
+## Overview
 
-_Which can be used to predict univariate time series_
+Pytsbe is a tool designed to help researchers and developers rigorously compare the performance of different time series forecasting methods. It provides access to various algorithms and datasets, simplifying the process of evaluating and selecting the best model for a given prediction task.
 
-The repository includes the following libraries and models for comparison:
-- [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports the time series forecasting task. Name in the repository `FEDOT`.
-- [AutoTS](https://github.com/winedarksea/AutoTS) - Automated time series forecasting library. Name in the repository `AutoTS`.
-- [pmdarima](https://github.com/alkaline-ml/pmdarima) - A statistical library to fit ts models. Name in the repository `pmdarima`.
-- [prophet](https://github.com/facebook/prophet) - a procedure for forecasting time series data based on an additive model. Name in the repository `prophet`.
-- [H2O](https://github.com/h2oai/h2o-3) - (lagged transformation + H2O) AutoML platform for tabular data. Name in the repository `H2O`.
-- [TPOT](https://github.com/EpistasisLab/tpot) - (lagged transformation + TPOT) Tree-based Pipeline Optimization Tool. AutoML library for tabular data. Name in the repository `TPOT`.
-- naive forecaster - repeat last observation. Name in the repository `repeat_last`.
-- naive forecaster - forecasts the average value of the time series. Name in the repository `average`.
-- naive forecaster ETS - Simple exponential smoothing model. Name in the repository `ets`.
+---
 
-#### Datasets
+## Table of Contents
 
-Available datasets (check data folder): 
-- [FRED](./data/fred.csv) ([license](https://fred.stlouisfed.org/legal/)) - Federal Reserve Economic Data is an online database consisting 
-  of economic data time series (source [link](https://fred.stlouisfed.org/)). Name in the repository `FRED`.
-- [TEP](./data/tep.csv) ([license](https://github.com/YKatser/CPDE/tree/master/TEP_data)) - Tennessee Eastman Process (TEP) is a
-  model of the industrial chemical process (source [link](https://paperswithcode.com/dataset/tep)). Name in the repository `TEP`.
-- [SMART](./data/smart.csv) - the readings with a time span of 1 minute of house appliances in kW from a 
-  smart meter and weather conditions (source [link](https://www.kaggle.com/datasets/taranvee/smart-home-dataset-with-weather-information)). 
-  Name in the repository `SMART`.
+- [Core features](#core-features)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Examples](#examples)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Citation](#citation)
 
-Below is a brief description of datasets:
+---
+## Core features
 
-| Dataset | Total number of <br> time series | Average row <br> length | Minimum row <br> length | Maximum row <br> length | Percentage of <br> non-stationary <br> time series |
-| :---------: | :---------------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :--------------------------------------------------------------: |
-| FRED        | 12                                        | 3674                             | 468                              | 17520                            | 67                                                               |
-| TEP         | 41                                        | 12801                            | 12801                            | 12801                            | 5                                                                |
-| SMART       | 28                                        | 503911                           | 503911                           | 503911                           | 21                                                               |
+1. **Time Series Forecasting Benchmark**: Provides a framework for benchmarking various time series forecasting algorithms and libraries, enabling comparative analysis of their performance.
+2. **Univariate Time Series Support**: Supports the evaluation of forecasting models on single-variable time series data, including datasets like FRED, TEP, and SMART.
+3. **Multivariate Time Series Support**: Enables benchmarking of algorithms designed for multi-variable time series forecasting, currently featuring the SSH dataset.
+4. **Library Integration**: Integrates with popular time series libraries such as FEDOT, AutoTS, pmdarima, Prophet, H2O, and TPOT, allowing for easy comparison.
+5. **Configurable Benchmarking**: Allows users to configure benchmarking experiments through YAML configuration files, specifying datasets, libraries, horizons, and validation blocks.
+6. **Automated Reporting**: Generates reports summarizing the performance of different forecasting models, including metrics like SMAPE and execution times.
 
-And visualisations:
-<img src="./docs/images/datasets_vis.png" width="900"/> 
+---
 
+## Installation
 
-### Multivariate time series 
+**Prerequisites:** requires Python >=3.8
 
-#### Libraries
+Install pytsbe using one of the following methods:
 
-_Which can be used to predict multivariate time series_
+**Build from source:**
 
-The repository includes the following libraries and models for comparison:
-- [FEDOT](https://github.com/nccr-itmo/FEDOT) - AutoML framework which supports both univariate and multivariate time
- series forecasting tasks. Name in the repository `FEDOT`.
-- naive forecaster - repeat last observation. Name in the repository `repeat_last`.
-- naive forecaster - forecasts the average value of the time series. Name in the repository `average`.
+1. Clone the pytsbe repository:
+```sh
+git clone https://github.com/ITMO-NSS-team/pytsbe
+```
 
-#### Datasets
+2. Navigate to the project directory:
+```sh
+cd pytsbe
+```
 
-At the moment, the repository contains one dataset of multivariate time series forecasting:
-- [SSH](./data/multivariate_ssh.csv) - Data were collected by simulating the sea surface height (SSH) using NEMO 
-(Nucleus for European Modelling of the Ocean) model.
-The data contain measurements of sea level (in meters) in different geographical locations. For each time series, the 
-coordinates (x and y) and the label are known. For each series, it is required to generate a forecast based on the previous 
-values of the current and all other time series. 
-Name in the repository `SSH`.
+3. Install the project dependencies:
 
-The picture below shows the location of the time series and shows examples of the structures of some of them.
+```sh
+pip install -r requirements.txt
+```
+## Getting Started
 
-<img src="./docs/images/ssh_description.png" width="900"/> 
+The `TimeSeriesLauncher` class is used to run the experiments.
 
-The model is designed to iteratively generate a forecast for each time series in the dataset.
- It is possible to use the historical values of not only the target series but 
- also the neighboring (exogenous time series).
+### Initialization parameters
+
+`working_dir` - directory for saving algorithm output. If the directory does not exist, it will be created
+
+`datasets` - a list of dataset names.
+
+`launches` - number of launches to perform.
+
+### perform_experiment method parameters
+
+`libraries_to_compare` - a list of libraries names.
+
+`horizons` - a list of forecast horizons names
+
+`libraries_params` - dictionary with parameters for libraries.
+
+`validation_blocks` - validation blocks for in-sample forecasting. If null or 1 - simple validation is made.
+
+`clip_border` - number of elements to remain in time series if there is a need to clip time series (if null - there is no cropping).
+
+Usage example:
+
+```python
+from pytsbe.main import TimeSeriesLauncher
+
+experimenter = TimeSeriesLauncher(working_dir='./output',
+                                  datasets=['FRED', 'TEP', 'SMART'],
+                                  launches=2)
+
+experimenter.perform_experiment(libraries_to_compare=['FEDOT', 'AutoTS', 'pmdarima', 'repeat_last'],
+                                horizons=[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                                libraries_params={'FEDOT': {'preset': 'ts', 'timeout': 2},
+                                                  'AutoTS': {'frequency': 'infer', 'prediction_interval': 0.9,
+                                                             'ensemble': 'all', 'model_list': 'default',
+                                                             'max_generations': 1, 'num_validations': 3}},
+                                validation_blocks=3,
+                                clip_border=1000)
+```
+
+<img src="./images/features_1.png" width="970"/> 
+
+<img src="./images/features_2.png" width="970"/> 
+
+<img src="./images/features_3.png" width="970"/>
+
+---
+
+## Examples
+
+Examples of how this should work and how it should be used are available [here](https://github.com/ITMO-NSS-team/pytsbe/tree/main/examples).
+
+---
 
 ## Documentation
 
-See [documentation](./docs) for a more detailed explanation. 
+A detailed pytsbe description is available [here](https://github.com/ITMO-NSS-team/pytsbe/tree/main/docs).
 
-## Benchmark
+---
 
-Check [experiments](./experiments) folder
+## Contributing
 
-Benchmark contains two forecasting tasks: 
-- univariate time series
-- multivariate time series
+- **[Report Issues](https://github.com/ITMO-NSS-team/pytsbe/issues)**: Submit bugs found or log feature requests for the project.
 
-For each case there is a folder with a configuration file to launch experiments. 
-Results according to experiments are presented in the tables below. 
+- **[Submit Pull Requests](https://github.com/ITMO-NSS-team/pytsbe/tree/main/.github/CONTRIBUTING.md)**: To learn more about making a contribution to pytsbe.
 
-### Univariate time series 
+---
 
-In progress
+## License
 
-### Multivariate time series 
+This project is protected under the BSD 3-Clause "New" or "Revised" License. For more details, refer to the [LICENSE](https://github.com/ITMO-NSS-team/pytsbe/tree/main/LICENSE.md) file.
 
-In progress
+---
 
-## Install
-Use the following command to install this module
+## Citation
 
-```
-pip install git+https://github.com/ITMO-NSS-team/pytsbe.git
-```
+If you use this software, please cite it as below.
 
-## Contributing 
-This module is designed so that you can add your library to it as easily as possible. 
+### APA format:
 
-<img src="./docs/images/architecture.png" width="900"/> 
+    ITMO-NSS-team (2022). pytsbe repository [Computer software]. https://github.com/ITMO-NSS-team/pytsbe
 
-Follow these steps to make the changes:
-- Make a fork of this repository, or create a separate branch
-- Add a new Forecaster class
-- If required, add a new class to serialize additional launch information
-- Create a pull request and ask our team to review it
-- After the code review, correct our notes and merge the code into the main branch
+### BibTeX format:
 
-And check [contribution guide](docs/contributing.md) for more details. 
+    @misc{pytsbe,
 
-## Citation 
+        author = {ITMO-NSS-team},
 
-Nikitin, Nikolay O., et al. "[Automated evolutionary approach for the design of composite machine learning pipelines.](https://doi.org/10.1016/j.future.2021.08.022)" 
-Future Generation Computer Systems 127 (2022): 109-125.
+        title = {pytsbe repository},
 
-Other papers - in [ResearchGate](https://www.researchgate.net/project/Evolutionary-multi-modal-AutoML-with-FEDOT-framework)
+        year = {2022},
+
+        publisher = {github.com},
+
+        journal = {github.com repository},
+
+        howpublished = {\url{https://github.com/ITMO-NSS-team/pytsbe.git}},
+
+        url = {https://github.com/ITMO-NSS-team/pytsbe.git}
+
+    }
+
+---
